@@ -6,7 +6,7 @@ import { Canvas as c } from "react-three-fiber";
 import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 
-const endpoint = "http://localhost:3005/";
+const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
 
 const Canvas = styled(c)`

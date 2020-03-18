@@ -5,7 +5,7 @@ import Dragvert from "./Dragvert";
 import Title from "./Title";
 import io from "socket.io-client";
 
-const endpoint = "http://localhost:3005/";
+const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
 
 const Main = styled.div`
