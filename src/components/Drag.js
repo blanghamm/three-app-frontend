@@ -11,12 +11,12 @@ const Blob = styled(a.div)`
 `;
 
 const Drag = ({ socket }) => {
-  const [{ x }, set] = useSpring(() => ({ x: 0, y: 0 }));
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }));
   const bind = useDrag(
     ({ down, movement: [mx, my] }) =>
       set(
         { x: down ? mx : 0, y: down ? my : 0, immediate: down },
-        socket.emit("outgoing", mx / 1000),
+        socket.emit("outgoing", (mx + my) / 9000),
         console.log("mx value " + mx)
       ),
     { bounds: { left: 0, right: 80, top: -50, bottom: 50 } }
@@ -26,7 +26,8 @@ const Drag = ({ socket }) => {
     <Blob
       {...bind()}
       style={{
-        x
+        x,
+        y
       }}
     />
   );

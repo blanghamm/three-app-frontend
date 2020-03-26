@@ -1,12 +1,20 @@
 import React from "react";
-import Box from "./components/Art";
+import Box from "./three-components/Art";
 import Dashboard from "./components/Dashboard";
-
+import styled from "styled-components";
 import { Switch, Route } from "react-router-dom";
+
+const Mainapp = styled.div`
+  display: flex;
+  justify-content: center;
+  user-zoom: fixed;
+  margin: 0;
+  padding: 0;
+`;
 
 function App() {
   return (
-    <div className="App">
+    <Mainapp>
       <Switch>
         <Route path="/three">
           <Box />
@@ -15,7 +23,7 @@ function App() {
           <Dashboard />
         </Route>
       </Switch>
-    </div>
+    </Mainapp>
   );
 }
 

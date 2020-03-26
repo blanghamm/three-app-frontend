@@ -8,15 +8,22 @@ const Blob = styled(a.div)`
   height: 80px;
   background: blueviolet;
   border-radius: 16px;
+  user-select: none;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Dragvert = ({ socket }) => {
   const [{ y }, set] = useSpring(() => ({ x: 0, y: 0 }));
-  const bind = useDrag(({ down, movement: [mx, my] }) => {
-    set({ x: down ? mx : 0, y: down ? my : 0, immediate: down });
-    socket.emit("outgoing", my / 1000);
-    console.log("test" + my);
-  });
+  const bind = useDrag(
+    ({ down, movement: [mx, my] }) =>
+      set(
+        { x: down ? mx : 0, y: down ? my : 0, immediate: down },
+        socket.emit("outgoing", my / 1000),
+        console.log("test" + my)
+      ),
+    { bounds: { left: 0, right: 200, top: 0, bottom: 20 } }
+  );
 
   return (
     <Blob
@@ -24,7 +31,7 @@ const Dragvert = ({ socket }) => {
       style={{
         y
       }}
-    />
+    ></Blob>
   );
 };
 
