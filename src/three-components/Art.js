@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { useFrame } from "react-three-fiber";
 import io from "socket.io-client";
@@ -6,9 +6,13 @@ import { Canvas as c } from "react-three-fiber";
 import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 import Effects from "./Effects";
+import Controls from "./Controls";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
+
+// extend({ OrbitControls });
 
 const Canvas = styled(c)`
   position: absolute !important;
@@ -16,7 +20,8 @@ const Canvas = styled(c)`
   padding: 0;
 `;
 
-function Content({ props, thing, color, count }) {
+function Content({ props, color, thing }) {
+  // This reference will give us direct access to the mesh
   const mesh = useRef();
   const [active, setActive] = useState(false);
   const funky = useSpring({
@@ -25,15 +30,14 @@ function Content({ props, thing, color, count }) {
   });
 
   useFrame(() => {
-    mesh.current.rotation.y = mesh.current.rotation.x += thing;
+    mesh.current.rotation.y = mesh.current.rotation.x += 0.01;
   });
 
   return (
-    <a.instancedMesh
+    <a.mesh
       {...props}
       ref={mesh}
-      scale={funky.scale}
-      args={[null, null, 100]}
+      scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
       onClick={e => setActive(!active)}
     >
       <torusBufferGeometry attach="geometry" args={[0.8, 0.28, 150, 32]} />
@@ -45,7 +49,7 @@ function Content({ props, thing, color, count }) {
         clearcoat={1}
         clearcoatRoughness={0.2}
       />
-    </a.instancedMesh>
+    </a.mesh>
   );
 }
 
@@ -74,20 +78,14 @@ function Lights() {
   );
 }
 
-export default function Box({ count }) {
-  const particles = useMemo(() => {
-    const temp = [];
-    for (let i = 0; i < count; i++) {
-      const t = Math.random() * 100;
-      const factor = 20 + Math.random() * 100;
-      const speed = 0.01 + Math.random() / 200;
-      const xFactor = -50 + Math.random() * 100;
-      const yFactor = -50 + Math.random() * 100;
-      const zFactor = -50 + Math.random() * 100;
-      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
-    }
-    return temp;
-  }, [count]);
+// const Controls = props => {
+//   const { camera } = useThree();
+//   const controls = useRef();
+//   useFrame(() => controls.current && controls.current.update());
+//   return <orbitControls ref={controls} args={[camera]} {...props} />;
+// };
+
+export default function Box() {
   const [thing, setThing] = useState(0.01);
   const [color, setColor] = useState(false);
   useEffect(() => {
@@ -106,12 +104,11 @@ export default function Box({ count }) {
   return (
     <Canvas
       shadowMap
-      camera={{ position: [0, 0, 30], fov: 100 }}
+      camera={{ position: [0, 0, 10], fov: 50 }}
       gl={{ antialias: true, alpha: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.Uncharted2ToneMapping;
         gl.outputEncoding = THREE.sRGBEncoding;
-        gl.setClearColor(new THREE.Color("black"));
       }}
     >
       {/* <spotLight
@@ -125,8 +122,8 @@ export default function Box({ count }) {
 
       <Lights />
       <Content thing={thing} color={color} />
+      {/* <Controls /> */}
       <Effects />
-      {/* <Colours /> */}
     </Canvas>
   );
 }
