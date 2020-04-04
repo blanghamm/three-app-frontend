@@ -18,17 +18,22 @@ const Mainapp = styled.div`
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 `;
 
+function Waiting() {
+  return (
+    <Suspense fallback={Loading}>
+      <Box />
+    </Suspense>
+  );
+}
+
 function App() {
   return (
     <Mainapp>
       <Switch>
         <Route path="/three">
-          <Suspense fallback={Loading}>
-            <Box />
-            <List />
-          </Suspense>
+          <Waiting />
+          <List />
         </Route>
-
         <Route path="/dashboard">
           <Dashboard />
         </Route>

@@ -13,7 +13,7 @@ const socket = io(endpoint);
 // extend({ OrbitControls });
 
 const Canvas = styled(c)`
-  position: absolute !important;
+  position: fixed !important;
   margin: 0;
   padding: 0;
 `;
@@ -100,30 +100,20 @@ export default function Box() {
   }, [thing]);
 
   return (
-    <Suspense fallback={null}>
-      <Canvas
-        shadowMap
-        camera={{ position: [0, 0, 10], fov: 50 }}
-        gl={{ antialias: true, alpha: false }}
-        onCreated={({ gl }) => {
-          gl.toneMapping = THREE.Uncharted2ToneMapping;
-          gl.outputEncoding = THREE.sRGBEncoding;
-        }}
-      >
-        {/* <spotLight
-        castShadow
-        intensity={1}
-        angle={Math.PI / 10}
-        position={[10, 10, 10]}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      /> */}
-
+    <Canvas
+      shadowMap
+      camera={{ position: [0, 0, 10], fov: 50 }}
+      gl={{ antialias: true, alpha: false }}
+      onCreated={({ gl }) => {
+        gl.toneMapping = THREE.Uncharted2ToneMapping;
+        gl.outputEncoding = THREE.sRGBEncoding;
+      }}
+    >
+      <Suspense fallback={null}>
         <Lights />
         <Content thing={thing} color={color} />
-        {/* <Controls /> */}
-        <Effects />
-      </Canvas>
-    </Suspense>
+      </Suspense>
+      <Effects />
+    </Canvas>
   );
 }

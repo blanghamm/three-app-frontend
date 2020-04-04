@@ -7,10 +7,14 @@ const Black = styled.div`
   background-color: black;
 `;
 
+const Title = styled.h1`
+  font-size: 50px;
+`;
+
 const Loading = () => {
   return (
     <Black>
-      <h1>Loading...</h1>
+      <Title>Loading...</Title>
     </Black>
   );
 };

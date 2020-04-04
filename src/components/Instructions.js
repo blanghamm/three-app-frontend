@@ -48,6 +48,9 @@ const Buttoncontainer = styled.div`
 `;
 
 const Button = styled(Link)`
+  font-weight: bold;
+  text-transform: lowercase;
+  display: inline-block;
   text-decoration-line: none;
   border-radius: 3px;
   padding: 0.5rem 0;
@@ -57,6 +60,7 @@ const Button = styled(Link)`
   color: black;
   border: 2px solid black;
   outline-color: black;
+  text-align: center;
 `;
 
 const Instructions = () => {
