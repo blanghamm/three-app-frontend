@@ -4,7 +4,7 @@ import { useDrag } from "react-use-gesture";
 import styled from "styled-components";
 
 const Blob = styled(a.div)`
-  width: 160px;
+  width: 80px;
   height: 80px;
   background: blueviolet;
   border-radius: 16px;
@@ -14,7 +14,7 @@ const Blob = styled(a.div)`
 `;
 
 const Dragvert = ({ socket }) => {
-  const [{ y }, set] = useSpring(() => ({ x: 0, y: 0 }));
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }));
   const bind = useDrag(
     ({ down, movement: [mx, my] }) =>
       set(
@@ -22,14 +22,15 @@ const Dragvert = ({ socket }) => {
         socket.emit("outgoing", my / 1000),
         console.log("test" + my)
       ),
-    { bounds: { left: 0, right: 200, top: 0, bottom: 20 } }
+    { bounds: { left: 0, right: 257, top: 0, bottom: 128 } }
   );
 
   return (
     <Blob
       {...bind()}
       style={{
-        y
+        x,
+        y,
       }}
     ></Blob>
   );
