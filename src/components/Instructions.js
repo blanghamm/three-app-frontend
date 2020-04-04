@@ -5,8 +5,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 const Main = styled.div`
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: orange;
+  background-color: white;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -48,8 +47,8 @@ const Buttoncontainer = styled.div`
   align-content: center;
 `;
 
-const Button = styled.button`
-  font-weight: bold;
+const Button = styled(Link)`
+  text-decoration-line: none;
   border-radius: 3px;
   padding: 0.5rem 0;
   margin-right: 1.5rem;
@@ -57,6 +56,7 @@ const Button = styled.button`
   background: transparent;
   color: black;
   border: 2px solid black;
+  outline-color: black;
 `;
 
 const Instructions = () => {
@@ -77,12 +77,8 @@ const Instructions = () => {
         </p>
       </Para>
       <Buttoncontainer>
-        <Link to="/three">
-          <Button>View Artwork</Button>
-        </Link>
-        <Link to="/dashboard">
-          <Button>Make your mark</Button>
-        </Link>
+        <Button to="/three">View Artwork</Button>
+        <Button to="/dashboard">Make your mark</Button>
       </Buttoncontainer>
     </Main>
   );

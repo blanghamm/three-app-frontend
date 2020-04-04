@@ -12,7 +12,6 @@ const Text = styled(a.div)`
 const H1 = styled(a.a)`
   justify-content: center;
   text-decoration: none;
-  font-family: tahoma;
   border-style: none !important;
   font-size: 20px;
   font-weight: bold;

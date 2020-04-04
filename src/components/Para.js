@@ -6,7 +6,6 @@ import styled from "styled-components";
 const P1 = styled(a.p)`
   justify-content: center;
   text-decoration: none;
-  font-family: tahoma;
   user-select: none;
   border-style: none !important;
   font-size: 20px;
@@ -31,7 +30,7 @@ const Para = ({ socket }) => {
     <P1
       {...bind()}
       style={{
-        x
+        x,
       }}
     >
       Nostrud amet ullamco minim id ea. Excepteur dolore occaecat proident ea

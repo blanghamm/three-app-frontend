@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Suspense } from "react";
 import * as THREE from "three";
 import { useFrame } from "react-three-fiber";
 import io from "socket.io-client";
@@ -6,8 +6,6 @@ import { Canvas as c } from "react-three-fiber";
 import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 import Effects from "./Effects";
-import Controls from "./Controls";
-// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
@@ -102,16 +100,17 @@ export default function Box() {
   }, [thing]);
 
   return (
-    <Canvas
-      shadowMap
-      camera={{ position: [0, 0, 10], fov: 50 }}
-      gl={{ antialias: true, alpha: false }}
-      onCreated={({ gl }) => {
-        gl.toneMapping = THREE.Uncharted2ToneMapping;
-        gl.outputEncoding = THREE.sRGBEncoding;
-      }}
-    >
-      {/* <spotLight
+    <Suspense fallback={null}>
+      <Canvas
+        shadowMap
+        camera={{ position: [0, 0, 10], fov: 50 }}
+        gl={{ antialias: true, alpha: false }}
+        onCreated={({ gl }) => {
+          gl.toneMapping = THREE.Uncharted2ToneMapping;
+          gl.outputEncoding = THREE.sRGBEncoding;
+        }}
+      >
+        {/* <spotLight
         castShadow
         intensity={1}
         angle={Math.PI / 10}
@@ -120,10 +119,11 @@ export default function Box() {
         shadow-mapSize-height={2048}
       /> */}
 
-      <Lights />
-      <Content thing={thing} color={color} />
-      {/* <Controls /> */}
-      <Effects />
-    </Canvas>
+        <Lights />
+        <Content thing={thing} color={color} />
+        {/* <Controls /> */}
+        <Effects />
+      </Canvas>
+    </Suspense>
   );
 }

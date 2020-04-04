@@ -1,10 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Box from "./three-components/Art";
 import Dashboard from "./components/Dashboard";
 import Instructions from "./components/Instructions";
-import Arrow from "./ui/Arrow";
+import List from "./static/List";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import Loading from "./ui/Loading";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -14,6 +14,8 @@ const Mainapp = styled.div`
   user-zoom: fixed;
   margin: 0;
   padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 `;
 
 function App() {
@@ -21,11 +23,12 @@ function App() {
     <Mainapp>
       <Switch>
         <Route path="/three">
-          <Box />
-          <Link to="/">
-            <Arrow />
-          </Link>
+          <Suspense fallback={Loading}>
+            <Box />
+            <List />
+          </Suspense>
         </Route>
+
         <Route path="/dashboard">
           <Dashboard />
         </Route>
