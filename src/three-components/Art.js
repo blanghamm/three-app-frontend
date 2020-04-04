@@ -26,7 +26,7 @@ function Content({ props, color, thing }) {
   const [active, setActive] = useState(false);
   const funky = useSpring({
     scale: active ? [10, 10, 10] : [10, 10, 10],
-    color: color ? "hotpink" : "hotpink"
+    color: color ? "hotpink" : "hotpink",
   });
 
   useFrame(() => {
@@ -38,7 +38,7 @@ function Content({ props, color, thing }) {
       {...props}
       ref={mesh}
       scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-      onClick={e => setActive(!active)}
+      onClick={(e) => setActive(!active)}
     >
       <torusBufferGeometry attach="geometry" args={[0.8, 0.28, 150, 32]} />
       <a.meshStandardMaterial
@@ -61,7 +61,7 @@ function Lights() {
         position={[10, 10, 10]}
         width={10}
         height={1000}
-        onUpdate={self => self.lookAt(new THREE.Vector3(0, 0, 0))}
+        onUpdate={(self) => self.lookAt(new THREE.Vector3(0, 0, 0))}
       />
       <pointLight intensity={0.3} position={[150, 150, 150]} />
       <ambientLight intensity={0.5} position={[150, 150, 150]} />
@@ -89,7 +89,7 @@ export default function Box() {
   const [thing, setThing] = useState(0.01);
   const [color, setColor] = useState(false);
   useEffect(() => {
-    socket.on("three", x => {
+    socket.on("three", (x) => {
       setThing(x);
     });
     if (thing > 0.04) {

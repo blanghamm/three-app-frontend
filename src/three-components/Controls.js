@@ -7,6 +7,6 @@ extend({ OrbitControls });
 export default function Controls(props) {
   const { camera } = useThree();
   const controls = useRef();
-  useFrame(() => controls.current.render(), 2);
+  useFrame(() => controls.current.update());
   return <orbitControls ref={controls} args={[camera]} {...props} />;
 }
