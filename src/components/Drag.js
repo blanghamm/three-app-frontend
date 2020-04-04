@@ -16,7 +16,7 @@ const Drag = ({ socket }) => {
     ({ down, movement: [mx, my] }) =>
       set(
         { x: down ? mx : 0, y: down ? my : 0, immediate: down },
-        socket.emit("outgoing", (mx + my) / 9000),
+        socket.emit("outgoing", (mx + my) / 1000),
         console.log("mx value " + mx)
       ),
     { bounds: { left: 0, right: 80, top: -50, bottom: 50 } }
@@ -27,7 +27,7 @@ const Drag = ({ socket }) => {
       {...bind()}
       style={{
         x,
-        y
+        y,
       }}
     />
   );

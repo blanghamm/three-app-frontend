@@ -28,7 +28,7 @@ function Content({ props, color, thing }) {
   });
 
   useFrame(() => {
-    mesh.current.rotation.y = mesh.current.rotation.x += 0.01;
+    mesh.current.rotation.y = mesh.current.rotation.x += thing;
   });
 
   return (
