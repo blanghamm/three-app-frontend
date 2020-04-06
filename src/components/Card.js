@@ -3,12 +3,12 @@ import styled from "styled-components";
 import { ReactComponent as Xcircle } from "../assets/x-circle.svg";
 
 const Main = styled.div`
-  width: 337px;
+  width: 21.0625em;
   height: 17.5em;
-  margin: 25px;
+  margin: 1.5625em;
   background-color: #fff;
   border-radius: 20px 20px 20px 20px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.div`
@@ -16,16 +16,14 @@ const Title = styled.div`
   user-select: none;
   height: 3.5em;
   border-radius: 20px 20px 0px 0px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-flow: row;
   justify-content: flex-start;
 `;
 
 const Content = styled.div`
-  width: 337px;
+  width: 21.0625em;
   height: 14em;
-  border-radius: 0px 0px 20px 20px;
 `;
 
 const Icon = styled(Xcircle)`
@@ -39,6 +37,7 @@ const Icon = styled(Xcircle)`
 
 const Text = styled.div`
   text-align: center;
+  font-weight: bold;
   color: white;
   font-size: 1.7em;
   margin-top: 0;
@@ -52,7 +51,7 @@ const Card = ({ title, content, exit }) => {
   return (
     <Main>
       <Title>
-        <Icon />
+        <Icon onClick={exit}></Icon>
         <Text>{title}</Text>
       </Title>
       <Content>{content}</Content>
