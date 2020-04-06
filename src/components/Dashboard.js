@@ -5,12 +5,11 @@ import Dragvert from "./Dragvert";
 import io from "socket.io-client";
 import Card from "./Card";
 import Empty from "./Emptycard";
-import Modal from "react-modal";
+import Modal from "styled-react-modal";
+import { ModalProvider } from "styled-react-modal";
 
 const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
-
-Modal.setAppElement("#root");
 
 const Main = styled.div`
   height: 90vh;
@@ -22,11 +21,23 @@ const Main = styled.div`
   justify-content: center;
 `;
 
-const Pop = styled(Modal)`
+const Pop = Modal.styled`
   width: 21.0625em;
-  height: 17.5em;
-  background-color: black;
+  height: 20em;
+  background-color: #ea9393;
+  border-radius: 20px 20px 20px 20px;
   justify-content: center;
+  display: flex;
+  flex-direction: column;
+`;
+
+const List = styled.div`
+  text-align: center;
+  margin: 1em;
+  color: white;
+  font-weight: bold;
+  user-select: none;
+  cursor: pointer;
 `;
 
 const Dashboard = () => {
@@ -46,15 +57,27 @@ const Dashboard = () => {
   };
 
   return (
-    <Main>
-      {show ? (
-        <Card title="sliders" content={<Drag socket={socket} />} exit={Exit} />
-      ) : (
-        <Empty open={OpenModal} />
-      )}
-      <Card title="draggable" content={<Dragvert socket={socket} />} />
-      <Pop isOpen={modalIsOpen} onRequestClose={CloseModal}></Pop>
-    </Main>
+    <ModalProvider>
+      <Main>
+        {show ? (
+          <Card
+            title="sliders"
+            content={<Drag socket={socket} />}
+            exit={Exit}
+          />
+        ) : (
+          <Empty open={OpenModal} />
+        )}
+        <Card title="draggable" content={<Dragvert socket={socket} />} />
+        <Pop isOpen={modalIsOpen} onBackgroundClick={CloseModal}>
+          <List>sliders</List>
+          <List>draggable</List>
+          <List>tilt</List>
+          <List>text convert</List>
+          <List>tapping</List>
+        </Pop>
+      </Main>
+    </ModalProvider>
   );
 };
 
