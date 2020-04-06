@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Pluscircle } from "../assets/plus-circle.svg";
 
@@ -21,10 +21,10 @@ const Icon = styled(Pluscircle)`
   margin: auto;
 `;
 
-const Empty = () => {
+const Empty = ({ open }) => {
   return (
     <Main>
-      <Icon></Icon>
+      <Icon onClick={open}></Icon>
     </Main>
   );
 };
