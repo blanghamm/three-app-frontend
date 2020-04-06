@@ -41,6 +41,8 @@ const List = styled.div`
 
 const Dashboard = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [select, setSelect] = useState("");
+  const [test, setTest] = useState(false);
 
   const OpenModal = () => {
     setIsOpen(true);
@@ -49,30 +51,61 @@ const Dashboard = () => {
   const CloseModal = () => {
     setIsOpen(false);
   };
-  // const  = () => {
-  //   console.log("clicked");
-  //   setShow(false);
-  // };
+
+  const OptionSelected = () => {
+    console.log(select);
+    setTest(true);
+    // CloseModal();
+  };
 
   return (
     <ModalProvider>
       <Main>
         <Card
-          title="sliders"
+          title={select}
           content={<Drag socket={socket} />}
           openmodal={OpenModal}
+          test={test}
         />
         <Card
-          title="draggable"
+          title={select}
           content={<Dragvert socket={socket} />}
           openmodal={OpenModal}
+          test={test}
         />
+        <Card title={select} openmodal={OpenModal} test={test} />
+
         <Pop isOpen={modalIsOpen} onBackgroundClick={CloseModal}>
-          <List>sliders</List>
-          <List>draggable</List>
-          <List>tilt</List>
-          <List>text convert</List>
-          <List>tapping</List>
+          <List
+            onMouseDown={() => setSelect("sliders")}
+            onMouseUp={OptionSelected}
+          >
+            sliders
+          </List>
+          <List
+            onMouseDown={() => setSelect("draggable")}
+            onMouseUp={OptionSelected}
+          >
+            draggable
+          </List>
+          <List
+            onMouseDown={() => setSelect("tilt")}
+            onMouseUp={OptionSelected}
+          >
+            tilt
+          </List>
+          <List
+            onMouseDown={() => setSelect("text convert")}
+            onMouseUp={OptionSelected}
+          >
+            text convert
+          </List>
+          <List
+            onMouseDown={() => setSelect("tapping")}
+            onMouseUp={OptionSelected}
+          >
+            tapping
+          </List>
         </Pop>
       </Main>
     </ModalProvider>

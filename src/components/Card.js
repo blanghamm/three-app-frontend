@@ -48,8 +48,8 @@ const Text = styled.div`
   justify-content: center;
 `;
 
-const Card = ({ title, content, openmodal }) => {
-  const [show, setShow] = useState(true);
+const Card = ({ title, content, openmodal, test }) => {
+  const [show, setShow] = useState(test);
   const Exit = () => {
     setShow(false);
   };
@@ -71,11 +71,3 @@ const Card = ({ title, content, openmodal }) => {
 };
 
 export default Card;
-
-// {
-//   show ? (
-//     <Card title="sliders" content={<Drag socket={socket} />} exit={Exit} />
-//   ) : (
-//     <Empty open={OpenModal} />
-//   );
-// }
