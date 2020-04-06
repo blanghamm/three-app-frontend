@@ -1,10 +1,10 @@
-import React, { Suspense } from "react";
+import React from "react";
 import Box from "./three-components/Art";
 import Dashboard from "./components/Dashboard";
 import Instructions from "./components/Instructions";
 import List from "./static/List";
 import styled from "styled-components";
-import Loading from "./ui/Loading";
+// import Loading from "./ui/Loading";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -19,11 +19,7 @@ const Mainapp = styled.div`
 `;
 
 function Waiting() {
-  return (
-    <Suspense fallback={Loading}>
-      <Box />
-    </Suspense>
-  );
+  return <Box />;
 }
 
 function App() {
