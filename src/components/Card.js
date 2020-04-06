@@ -7,7 +7,6 @@ const Main = styled.div`
   height: 17.5em;
   margin: 25px;
   background-color: #fff;
-  text-align: center;
   border-radius: 20px 20px 20px 20px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 `;
@@ -17,6 +16,10 @@ const Title = styled.div`
   user-select: none;
   height: 3.5em;
   border-radius: 20px 20px 0px 0px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-start;
 `;
 
 const Content = styled.div`
@@ -27,26 +30,29 @@ const Content = styled.div`
 
 const Icon = styled(Xcircle)`
   color: white;
-  position: relative;
+  position: absolute;
   float: left;
   width: 2.25em;
   height: 2.25em;
-  margin: auto;
   padding: 0.625em;
 `;
 
 const Text = styled.div`
   text-align: center;
+  color: white;
   font-size: 1.7em;
   margin-top: 0;
   padding: 0.375em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
 
 const Card = ({ title, content, exit }) => {
   return (
     <Main>
-      <Icon />
       <Title>
+        <Icon />
         <Text>{title}</Text>
       </Title>
       <Content>{content}</Content>
