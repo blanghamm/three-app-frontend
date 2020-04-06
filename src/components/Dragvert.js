@@ -22,7 +22,7 @@ const Dragvert = ({ socket }) => {
         socket.emit("outgoing", my / 1000),
         console.log("test" + my)
       ),
-    { bounds: { left: 0, right: 257, top: 0, bottom: 128 } }
+    { bounds: { left: 0, right: 257, top: 0, bottom: 144 } }
   );
 
   return (
