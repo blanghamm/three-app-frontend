@@ -1,7 +1,24 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Xcircle } from "../assets/x-circle.svg";
-import Empty from "./Emptycard";
+import { ReactComponent as Pluscircle } from "../assets/plus-circle.svg";
+
+const IconCircle = styled(Pluscircle)`
+  color: white;
+  width: 4.25em;
+  height: 4.25em;
+  margin: auto;
+`;
+
+const MainEmpty = styled.div`
+  width: 21.0625em;
+  height: 17.5em;
+  margin: 1.5625em;
+  background-color: #ea9393;
+  border-radius: 20px 20px 20px 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+`;
 
 const Main = styled.div`
   width: 21.0625em;
@@ -48,7 +65,27 @@ const Text = styled.div`
   justify-content: center;
 `;
 
-const Card = ({ title, content, openmodal, test }) => {
+const Populatedcard = ({ title, content, exit }) => {
+  return (
+    <Main>
+      <Title>
+        <Icon onClick={exit}></Icon>
+        <Text>{title}</Text>
+      </Title>
+      <Content>{content}</Content>
+    </Main>
+  );
+};
+
+const Emptycard = ({ open }) => {
+  return (
+    <MainEmpty>
+      <IconCircle onClick={open}></IconCircle>
+    </MainEmpty>
+  );
+};
+
+export default function Card({ open, title, content, openmodal, test }) {
   const [show, setShow] = useState(test);
   const Exit = () => {
     setShow(false);
@@ -56,18 +93,15 @@ const Card = ({ title, content, openmodal, test }) => {
   return (
     <div>
       {show ? (
-        <Main>
-          <Title>
-            <Icon onClick={Exit}></Icon>
-            <Text>{title}</Text>
-          </Title>
-          <Content>{content}</Content>
-        </Main>
+        <Populatedcard
+          open={open}
+          title={title}
+          content={content}
+          exit={Exit}
+        />
       ) : (
-        <Empty open={openmodal} />
+        <Emptycard open={openmodal} />
       )}
     </div>
   );
-};
-
-export default Card;
+}

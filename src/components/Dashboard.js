@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Drag from "./Drag";
 import Dragvert from "./Dragvert";
@@ -40,9 +40,19 @@ const List = styled.div`
 `;
 
 const Dashboard = () => {
+  let index = 0;
+  const data = [
+    { key: index++, label: "sliders" },
+    { key: index++, label: "draggable" },
+    { key: index++, label: "tilt" },
+    { key: index++, label: "text convert" },
+    { key: index++, label: "tapping" },
+  ];
+
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [select, setSelect] = useState("");
-  const [test, setTest] = useState(false);
+  const [select, setSelect] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [test, setTest] = useState(true);
 
   const OpenModal = () => {
     setIsOpen(true);
@@ -52,60 +62,31 @@ const Dashboard = () => {
     setIsOpen(false);
   };
 
-  const OptionSelected = () => {
-    console.log(select);
-    setTest(true);
-    // CloseModal();
-  };
+  console.log(selected);
 
   return (
     <ModalProvider>
       <Main>
         <Card
-          title={select}
+          title={"select"}
           content={<Drag socket={socket} />}
           openmodal={OpenModal}
           test={test}
         />
         <Card
-          title={select}
+          title={"select"}
           content={<Dragvert socket={socket} />}
           openmodal={OpenModal}
           test={test}
         />
-        <Card title={select} openmodal={OpenModal} test={test} />
-
+        <Card title={"select"} openmodal={OpenModal} test={test} />
+        {/* fires the click handler a few too many times   */}
         <Pop isOpen={modalIsOpen} onBackgroundClick={CloseModal}>
-          <List
-            onMouseDown={() => setSelect("sliders")}
-            onMouseUp={OptionSelected}
-          >
-            sliders
-          </List>
-          <List
-            onMouseDown={() => setSelect("draggable")}
-            onMouseUp={OptionSelected}
-          >
-            draggable
-          </List>
-          <List
-            onMouseDown={() => setSelect("tilt")}
-            onMouseUp={OptionSelected}
-          >
-            tilt
-          </List>
-          <List
-            onMouseDown={() => setSelect("text convert")}
-            onMouseUp={OptionSelected}
-          >
-            text convert
-          </List>
-          <List
-            onMouseDown={() => setSelect("tapping")}
-            onMouseUp={OptionSelected}
-          >
-            tapping
-          </List>
+          {data.map((list) => (
+            <List key={list.key} onClick={() => setSelected(list.label)}>
+              {list.label}
+            </List>
+          ))}
         </Pop>
       </Main>
     </ModalProvider>
