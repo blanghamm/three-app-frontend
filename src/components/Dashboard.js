@@ -4,7 +4,6 @@ import Drag from "./Drag";
 import Dragvert from "./Dragvert";
 import io from "socket.io-client";
 import Card from "./Card";
-import Empty from "./Emptycard";
 import Modal from "styled-react-modal";
 import { ModalProvider } from "styled-react-modal";
 
@@ -12,8 +11,8 @@ const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
 
 const Main = styled.div`
-  height: 90vh;
-  width: 90vw;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -22,7 +21,7 @@ const Main = styled.div`
 `;
 
 const Pop = Modal.styled`
-  width: 21.0625em;
+  width: 22.0625em;
   height: 20em;
   background-color: #ea9393;
   border-radius: 20px 20px 20px 20px;
@@ -41,8 +40,9 @@ const List = styled.div`
 `;
 
 const Dashboard = () => {
-  const [show, setShow] = useState(true);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [select, setSelect] = useState("");
+  const [test, setTest] = useState(false);
 
   const OpenModal = () => {
     setIsOpen(true);
@@ -51,30 +51,61 @@ const Dashboard = () => {
   const CloseModal = () => {
     setIsOpen(false);
   };
-  const Exit = () => {
-    console.log("clicked");
-    setShow(false);
+
+  const OptionSelected = () => {
+    console.log(select);
+    setTest(true);
+    // CloseModal();
   };
 
   return (
     <ModalProvider>
       <Main>
-        {show ? (
-          <Card
-            title="sliders"
-            content={<Drag socket={socket} />}
-            exit={Exit}
-          />
-        ) : (
-          <Empty open={OpenModal} />
-        )}
-        <Card title="draggable" content={<Dragvert socket={socket} />} />
+        <Card
+          title={select}
+          content={<Drag socket={socket} />}
+          openmodal={OpenModal}
+          test={test}
+        />
+        <Card
+          title={select}
+          content={<Dragvert socket={socket} />}
+          openmodal={OpenModal}
+          test={test}
+        />
+        <Card title={select} openmodal={OpenModal} test={test} />
+
         <Pop isOpen={modalIsOpen} onBackgroundClick={CloseModal}>
-          <List>sliders</List>
-          <List>draggable</List>
-          <List>tilt</List>
-          <List>text convert</List>
-          <List>tapping</List>
+          <List
+            onMouseDown={() => setSelect("sliders")}
+            onMouseUp={OptionSelected}
+          >
+            sliders
+          </List>
+          <List
+            onMouseDown={() => setSelect("draggable")}
+            onMouseUp={OptionSelected}
+          >
+            draggable
+          </List>
+          <List
+            onMouseDown={() => setSelect("tilt")}
+            onMouseUp={OptionSelected}
+          >
+            tilt
+          </List>
+          <List
+            onMouseDown={() => setSelect("text convert")}
+            onMouseUp={OptionSelected}
+          >
+            text convert
+          </List>
+          <List
+            onMouseDown={() => setSelect("tapping")}
+            onMouseUp={OptionSelected}
+          >
+            tapping
+          </List>
         </Pop>
       </Main>
     </ModalProvider>

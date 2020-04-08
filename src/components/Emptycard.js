@@ -9,15 +9,13 @@ const Main = styled.div`
   background-color: #ea9393;
   border-radius: 20px 20px 20px 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
 `;
 
 const Icon = styled(Pluscircle)`
   color: white;
-  width: 2.25em;
-  height: 2.25em;
-  padding: 7.65em;
-  display: flex;
-  justify-content: center;
+  width: 4.25em;
+  height: 4.25em;
   margin: auto;
 `;
 

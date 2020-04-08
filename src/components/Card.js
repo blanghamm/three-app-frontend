@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Xcircle } from "../assets/x-circle.svg";
+import Empty from "./Emptycard";
 
 const Main = styled.div`
   width: 21.0625em;
@@ -47,15 +48,25 @@ const Text = styled.div`
   justify-content: center;
 `;
 
-const Card = ({ title, content, exit }) => {
+const Card = ({ title, content, openmodal, test }) => {
+  const [show, setShow] = useState(test);
+  const Exit = () => {
+    setShow(false);
+  };
   return (
-    <Main>
-      <Title>
-        <Icon onClick={exit}></Icon>
-        <Text>{title}</Text>
-      </Title>
-      <Content>{content}</Content>
-    </Main>
+    <div>
+      {show ? (
+        <Main>
+          <Title>
+            <Icon onClick={Exit}></Icon>
+            <Text>{title}</Text>
+          </Title>
+          <Content>{content}</Content>
+        </Main>
+      ) : (
+        <Empty open={openmodal} />
+      )}
+    </div>
   );
 };
 
