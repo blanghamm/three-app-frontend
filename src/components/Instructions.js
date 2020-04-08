@@ -17,13 +17,13 @@ const Main = styled.div`
 `;
 
 const Title = styled.div`
-  margin-left: 80px;
+  margin-left: 40px;
   justify-content: center;
   align-content: center;
 `;
 
 const Para = styled.div`
-  margin-left: 80px;
+  margin-left: 40px;
   margin-top: 10px;
   margin-bottom: 10px;
   justify-content: center;
@@ -42,9 +42,10 @@ const Secondary = styled.h2`
 `;
 
 const Buttoncontainer = styled.div`
-  margin-left: 80px;
-  justify-content: center;
-  align-content: center;
+  margin-left: 40px;
+  justify-content: left;
+  display: flex;
+  flex-direction: row;
 `;
 
 const Button = styled(Link)`
@@ -52,22 +53,27 @@ const Button = styled(Link)`
   text-transform: lowercase;
   display: inline-block;
   text-decoration-line: none;
-  border-radius: 3px;
+  border-radius: 5px;
   padding: 0.5rem 0;
   margin-right: 1.5rem;
   width: 11rem;
   background: transparent;
-  color: black;
-  border: 2px solid black;
+  color: #ea9393;
+  border: 2px solid #ea9393;
   outline-color: black;
   text-align: center;
+  &:hover {
+    color: white;
+    background: #ea9393;
+    transition: 0.5s ease-in-out;
+  }
 `;
 
 const Instructions = () => {
   return (
     <Main>
       <Title>
-        <Primary>Collabrative Piece</Primary>
+        <Primary>Collaborative Piece</Primary>
         <Secondary>Digital Media Design Final Year Project</Secondary>
       </Title>
       <Para>
