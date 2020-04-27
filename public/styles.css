@@ -1,6 +1,6 @@
 body {
   user-zoom: fixed;
-  overscroll-behavior: none;
+  /* overscroll-behavior: none; */
   margin: 0;
   padding: 0;
 }

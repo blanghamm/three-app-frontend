@@ -8,6 +8,7 @@ const Blob = styled(a.div)`
   height: 80px;
   background: blueviolet;
   border-radius: 16px;
+  z-index: 2;
   user-select: none;
   justify-content: center;
   align-items: center;

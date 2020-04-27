@@ -12,15 +12,15 @@ extend({
   ShaderPass,
   RenderPass,
   UnrealBloomPass,
-  FilmPass
+  FilmPass,
 });
 
 export default function Effects() {
-  const aspect = useMemo(() => new THREE.Vector2(), []);
+  const aspect = useMemo(() => new THREE.Vector3(), []);
   const composer = useRef();
   const { scene, gl, size, camera } = useThree();
   useEffect(() => void composer.current.setSize(size.width, size.height), [
-    size
+    size,
   ]);
   useFrame(() => composer.current.render(), 2);
   return (

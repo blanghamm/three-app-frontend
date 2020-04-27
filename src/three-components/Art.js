@@ -13,7 +13,10 @@ const socket = io(endpoint);
 // extend({ OrbitControls });
 
 const Canvas = styled(c)`
-  position: fixed !important;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
   margin: 0;
   padding: 0;
 `;

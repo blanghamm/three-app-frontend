@@ -1,34 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSpring, a } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import styled from "styled-components";
 
+const height = window.innerHeight;
+
 const Blob = styled(a.div)`
-  width: 80px;
-  height: 80px;
-  background: hotpink;
-  border-radius: 16px;
+  width: 20em;
+  height: 20em;
+  z-index: 2;
+  justify-content: center;
+  text-align: center;
 `;
 
-const Drag = ({ socket }) => {
-  const [{ x }, set] = useSpring(() => ({ x: 0, y: 0 }));
+const Text = styled.h1`
+  color: white;
+  display: inline-block;
+  font-size: 15vmin;
+`;
+
+const Drag = ({ socket, text, number }) => {
+  const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }));
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) =>
-      set(
-        { x: down ? mx : 0, y: down ? my : 0, immediate: down },
-        socket.emit("outgoing", (mx + my) / 1000),
-        console.log("mx value " + mx)
-      ),
-    { bounds: { left: 0, right: 257, top: 0, bottom: 208 } }
+    ({ down, offset: [x, y], cancel }) =>
+      set({ x, y, immediate: down }, socket.emit("outgoing", (x + y) / 1000)),
+    {
+      bounds: { left: height, right: 257, top: 0, bottom: 208 },
+      lockDirection: true,
+    }
   );
 
   return (
-    <Blob
-      {...bind()}
-      style={{
-        x,
-      }}
-    />
+    <Blob {...bind()} style={{ backgroundColor: number, x, y }}>
+      <Text>{text}</Text>
+    </Blob>
   );
 };
 

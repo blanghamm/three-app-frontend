@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const Aist = styled(Link)`
   color: white;
-  position: relative;
   margin-right: 20px;
+  position: relative;
   text-decoration-line: none;
   transition: color 0.2s, transform 0.2s;
   &:hover {
@@ -16,7 +16,7 @@ const Aist = styled(Link)`
 `;
 
 const ListMain = styled.div`
-  z-index: 2;
+  position: absolute;
   margin: 50px;
   justify-content: center;
   text-decoration-line: none;

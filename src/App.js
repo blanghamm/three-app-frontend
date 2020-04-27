@@ -4,11 +4,12 @@ import Dashboard from "./components/Dashboard";
 import Instructions from "./components/Instructions";
 import List from "./static/List";
 import styled from "styled-components";
-// import Loading from "./ui/Loading";
 
 import { Switch, Route } from "react-router-dom";
 
 const Mainapp = styled.div`
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   user-zoom: fixed;
@@ -18,16 +19,12 @@ const Mainapp = styled.div`
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 `;
 
-function Waiting() {
-  return <Box />;
-}
-
 function App() {
   return (
     <Mainapp>
       <Switch>
         <Route path="/three">
-          <Waiting />
+          <Box />
           <List />
         </Route>
         <Route path="/dashboard">

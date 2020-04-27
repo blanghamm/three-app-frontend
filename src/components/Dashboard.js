@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Control from "../three-components/control-components/Control";
 import Drag from "./Drag";
 import Dragvert from "./Dragvert";
+import Para from "./Para";
 import io from "socket.io-client";
-import Card from "./Card";
-import Modal from "styled-react-modal";
-import { ModalProvider } from "styled-react-modal";
+import Scroll from "./Scroll";
+import colors from "nice-color-palettes";
 
 const endpoint = process.env.REACT_APP_THREE_API_URL;
 const socket = io(endpoint);
@@ -13,83 +14,65 @@ const socket = io(endpoint);
 const Main = styled.div`
   height: 100vh;
   width: 100vw;
+  user-select: none;
+  background-color: #303033;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-content: center;
+  align-items: center;
   justify-content: center;
 `;
 
-const Pop = Modal.styled`
-  width: 22.0625em;
-  height: 20em;
-  background-color: #ea9393;
-  border-radius: 20px 20px 20px 20px;
-  justify-content: center;
-  display: flex;
-  flex-direction: column;
-`;
+let randoms = Array.from({ length: 100 }, () =>
+  Math.floor(Math.random() * 100)
+);
 
-const List = styled.div`
-  text-align: center;
-  margin: 1em;
-  color: white;
-  font-weight: bold;
-  user-select: none;
-  cursor: pointer;
-`;
+console.log("color " + colors[5]);
+
+let select = Math.floor(Math.random() * 5);
+
+console.log(select);
 
 const Dashboard = () => {
   let index = 0;
-  const data = [
-    { key: index++, label: "sliders" },
-    { key: index++, label: "draggable" },
-    { key: index++, label: "tilt" },
-    { key: index++, label: "text convert" },
-    { key: index++, label: "tapping" },
+  const color = [
+    { key: index++, number: "#cdb380", label: "C" },
+    { key: index++, number: "#e8ddcb", label: "O" },
+    { key: index++, number: "#033649", label: "L" },
+    { key: index++, number: "#4B2F3C", label: "L" },
+    { key: index++, number: "#1E3947", label: "E" },
+    { key: index++, number: "#D82338", label: "C" },
+    { key: index++, number: "#C39133", label: "T" },
+    { key: index++, number: "#410B23", label: "I" },
+    { key: index++, number: "#C86D6D", label: "V" },
+    { key: index++, number: "#C86D6D", label: "V" },
+    { key: index++, number: "#C86D6D", label: "V" },
+    { key: index++, number: "#C86D6D", label: "V" },
   ];
-
-  const [modalIsOpen, setIsOpen] = useState(false);
-  const [select, setSelect] = useState([]);
-  const [selected, setSelected] = useState("");
-  const [test, setTest] = useState(true);
-
-  const OpenModal = () => {
-    setIsOpen(true);
-  };
-
-  const CloseModal = () => {
-    setIsOpen(false);
-  };
-
-  console.log(selected);
-
   return (
-    <ModalProvider>
-      <Main>
-        <Card
-          title={"select"}
-          content={<Drag socket={socket} />}
-          openmodal={OpenModal}
-          test={test}
-        />
-        <Card
-          title={"select"}
-          content={<Dragvert socket={socket} />}
-          openmodal={OpenModal}
-          test={test}
-        />
-        <Card title={"select"} openmodal={OpenModal} test={test} />
-        {/* fires the click handler a few too many times   */}
-        <Pop isOpen={modalIsOpen} onBackgroundClick={CloseModal}>
-          {data.map((list) => (
-            <List key={list.key} onClick={() => setSelected(list.label)}>
-              {list.label}
-            </List>
-          ))}
-        </Pop>
-      </Main>
-    </ModalProvider>
+    <Main>
+      {color.map((list) => (
+        <Drag
+          socket={socket}
+          number={list.number}
+          key={list.key}
+          text={list.label}
+        ></Drag>
+      ))}
+
+      {/* <Drag socket={socket} number={color2} text="O" />
+      <Drag socket={socket} number={color3} text="L" />
+      <Drag socket={socket} number={color4} text="L" />
+      <Drag socket={socket} number={color5} text="E" />
+      <Drag socket={socket} number={color6} text="E" />
+      <Drag socket={socket} number={color7} text="E" />
+      <Drag socket={socket} number={color8} text="E" /> */}
+      {/* <Para socket={socket} /> */}
+
+      {/* does work but the page needs to be scrollable*/}
+      {/* <Scroll /> */}
+    </Main>
   );
 };
 
