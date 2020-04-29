@@ -27,8 +27,14 @@ const H1 = styled(a.a)`
 
 const Title = ({ socket, TITLES, reward }) => {
   const [count, setCount] = useState(0.001);
+  //Maybe remove the reward me shit as it's cheesy, but need.
   const Test = () => {
-    reward.punishMe();
+    if (count < 0.007) {
+      reward.rewardMe();
+    }
+    if (count === 0.007) {
+      reward.punishMe();
+    }
     setCount(count + 0.001);
     if (count > 0.007) {
       setCount(count === 0.001);

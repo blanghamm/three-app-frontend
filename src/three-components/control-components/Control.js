@@ -43,7 +43,7 @@ function Content({ props, count, mouse }) {
     for (let i = 0; i < count; i++) {
       const t = Math.random() * 100;
       const factor = 20 + Math.random() * 100;
-      const speed = 0.01 + Math.random() / 200;
+      const speed = 0.01 + Math.random() / 1000;
       const xFactor = -20 + Math.random() * 40;
       const yFactor = -20 + Math.random() * 40;
       const zFactor = -20 + Math.random() * 40;
@@ -90,7 +90,7 @@ function Content({ props, count, mouse }) {
       args={[null, null, count]}
       onClick={(e) => setActive(!active)}
     >
-      <boxBufferGeometry attach="geometry" args={[0.8, 0.28, 150, 32]} />
+      <sphereBufferGeometry attach="geometry" args={[0.8, 0.28, 150, 32]} />
       <a.meshStandardMaterial
         attach="material"
         color={funky.color}
@@ -128,24 +128,20 @@ function Lights() {
   );
 }
 
-export default function Control({ socket }) {
-  const position = useMousePosition();
+export default function Control() {
+  const [thing, setThing] = useState(0);
   const mouse = useRef([0, 0]);
   const onMouseMove = useCallback(
     ({ clientX: x, clientY: y }) =>
       (mouse.current = [x - window.innerWidth / 2, y - window.innerHeight / 2]),
     []
   );
-  //   useEffect(() => {
-  //     socket.emit("outgoing", position.x / 20000);
-  //     console.log("mouse " + position.x / 20000);
-  //   }, [position]);
 
   return (
     <div style={{ width: "100%", height: "100%" }} onMouseMove={onMouseMove}>
       <Canvas
         shadowMap
-        camera={{ position: [0, 0, 70], fov: 75 }}
+        camera={{ position: [0, 0, 150], fov: 75 }}
         gl={{ antialias: true, alpha: false }}
         onCreated={({ gl }) => {
           gl.setClearColor("white");

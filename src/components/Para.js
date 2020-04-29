@@ -8,22 +8,22 @@ const P1 = styled(a.p)`
   text-decoration: none;
   user-select: none;
   border-style: none !important;
-  z-index: 2;
+  z-index: 0;
+  position: relative;
   font-size: 20px;
   font-weight: bold;
   width: 200px;
+  color: white;
+  margin: 2em;
 `;
 
 const Para = ({ socket, toggle }) => {
   const [{ x }, set] = useSpring(() => ({ x: 0, y: 0 }));
   const bind = useDrag(
-    ({ down, movement: [mx, my] }) =>
-      set(
-        { x: down ? mx : 0, y: down ? my : 0, immediate: down },
-        socket.emit("outgoing", mx / 1000)
-      ),
+    ({ down, movement: [x] }) =>
+      set({ x: down ? x : 0 }, socket.emit("outgoing", x)),
 
-    { bounds: { left: 0, right: 180, top: -50, bottom: 50 } }
+    { bounds: { left: 0, right: 80, top: -50, bottom: 50 } }
   );
   return (
     <P1
@@ -32,11 +32,9 @@ const Para = ({ socket, toggle }) => {
         x,
       }}
     >
-      Nostrud amet ullamco minim id ea. Excepteur dolore occaecat proident ea
-      labore. Veniam ullamco aliqua commodo eiusmod minim. Aliqua minim sunt
-      elit id voluptate dolor amet Lorem officia enim ad. Nisi elit esse ullamco
-      ipsum non cillum. Incididunt adipisicing deserunt ea officia ipsum
-      consequat.
+      Collective art is piece designed around interaction design and network
+      relations, how we unknowingly collab with others through internet
+      technologies.
     </P1>
   );
 };

@@ -3,9 +3,11 @@ import { useSpring, a } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import styled from "styled-components";
 
+// const width =
+
 const Blob = styled(a.div)`
-  width: 80px;
-  height: 80px;
+  width: 25vw;
+  height: 25vh;
   background: blueviolet;
   border-radius: 16px;
   z-index: 2;
@@ -14,7 +16,7 @@ const Blob = styled(a.div)`
   align-items: center;
 `;
 
-const Dragvert = ({ socket }) => {
+const Dragvert = ({ socket, width, height }) => {
   const [{ x, y }, set] = useSpring(() => ({ x: 0, y: 0 }));
   const bind = useDrag(
     ({ down, movement: [mx, my] }) =>
