@@ -5,8 +5,13 @@ import React, { useRef } from "react";
 extend({ OrbitControls });
 
 export default function Controls(props) {
-  const { camera } = useThree();
+  const {
+    camera,
+    gl: { domElement },
+  } = useThree();
   const controls = useRef();
-  useFrame(() => controls.current.update());
-  return <orbitControls ref={controls} args={[camera]} {...props} />;
+  useFrame((state) => controls.current.update());
+  return (
+    <orbitControls ref={controls} args={[camera, domElement]} {...props} />
+  );
 }

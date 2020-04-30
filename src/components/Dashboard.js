@@ -110,7 +110,7 @@ const Dashboard = () => {
 
   return (
     <Main>
-      <input type="checkbox" checked={visible} onChange={removeTop}></input>
+      {/* <input type="checkbox" checked={visible} onChange={removeTop}></input> */}
       {!visible && (
         <Main>
           <Title socket={socket} />
