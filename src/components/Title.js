@@ -26,7 +26,7 @@ const H1 = styled(a.a)`
 `;
 
 const Title = ({ socket, TITLES, reward }) => {
-  const [count, setCount] = useState(0.001);
+  const [count, setCount] = useState(1);
   //Maybe remove the reward me shit as it's cheesy, but need.
   const Test = () => {
     if (count < 0.007) {
@@ -35,10 +35,7 @@ const Title = ({ socket, TITLES, reward }) => {
     if (count === 0.007) {
       reward.punishMe();
     }
-    setCount(count + 0.001);
-    if (count > 0.007) {
-      setCount(count === 0.001);
-    }
+    setCount(count + 1);
     socket.emit("outgoing", count);
     console.log("count number = " + count);
   };
