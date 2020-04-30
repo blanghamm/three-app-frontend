@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/three-app-frontend/static/js/main.ae80eaac.chunk.js",
-    "main.js.map": "/three-app-frontend/static/js/main.ae80eaac.chunk.js.map",
+    "main.js": "/three-app-frontend/static/js/main.32dc4f5d.chunk.js",
+    "main.js.map": "/three-app-frontend/static/js/main.32dc4f5d.chunk.js.map",
     "runtime-main.js": "/three-app-frontend/static/js/runtime-main.ecf5b25b.js",
     "runtime-main.js.map": "/three-app-frontend/static/js/runtime-main.ecf5b25b.js.map",
-    "static/js/2.0cf51397.chunk.js": "/three-app-frontend/static/js/2.0cf51397.chunk.js",
-    "static/js/2.0cf51397.chunk.js.map": "/three-app-frontend/static/js/2.0cf51397.chunk.js.map",
+    "static/js/2.32a90fa8.chunk.js": "/three-app-frontend/static/js/2.32a90fa8.chunk.js",
+    "static/js/2.32a90fa8.chunk.js.map": "/three-app-frontend/static/js/2.32a90fa8.chunk.js.map",
     "index.html": "/three-app-frontend/index.html",
-    "precache-manifest.ce89624f719d9b203d46c9131d037805.js": "/three-app-frontend/precache-manifest.ce89624f719d9b203d46c9131d037805.js",
+    "precache-manifest.f3e13cd4d93104e2f6e0c81c67d827a1.js": "/three-app-frontend/precache-manifest.f3e13cd4d93104e2f6e0c81c67d827a1.js",
     "service-worker.js": "/three-app-frontend/service-worker.js",
-    "static/js/2.0cf51397.chunk.js.LICENSE.txt": "/three-app-frontend/static/js/2.0cf51397.chunk.js.LICENSE.txt"
+    "static/js/2.32a90fa8.chunk.js.LICENSE.txt": "/three-app-frontend/static/js/2.32a90fa8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.ecf5b25b.js",
-    "static/js/2.0cf51397.chunk.js",
-    "static/js/main.ae80eaac.chunk.js"
+    "static/js/2.32a90fa8.chunk.js",
+    "static/js/main.32dc4f5d.chunk.js"
   ]
 }
