@@ -4,7 +4,7 @@ import Dashboard from "./components/Dashboard";
 import Instructions from "./components/Instructions";
 import List from "./static/List";
 import styled from "styled-components";
-// import Control from "./three-components/control-components/Control";
+import { socket } from "./socket/config";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -25,11 +25,11 @@ function App() {
     <Mainapp>
       <Switch>
         <Route path="/three">
-          <Box />
+          <Box socket={socket} />
           {/* <List /> */}
         </Route>
         <Route path="/">
-          <Dashboard />
+          <Dashboard socket={socket} />
         </Route>
         {/* <Route path="/">
           <Instructions />

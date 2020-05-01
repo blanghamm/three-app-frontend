@@ -6,7 +6,7 @@ import Para from "./Para";
 import Scroll from "./Scroll";
 import Title from "./Title";
 import Text from "./Text";
-import { socket } from "../socket/config";
+// import { socket } from "../socket/config";
 
 const Main = styled.div`
   height: 100vh;
@@ -21,7 +21,7 @@ const Main = styled.div`
   justify-content: center;
 `;
 
-const Dashboard = () => {
+const Dashboard = ({ socket }) => {
   const [visible, setVisible] = useState(false);
   const textBoxSize = Math.floor(Math.random() * 10 + 2).toString() + "em";
   const removeTop = () => {

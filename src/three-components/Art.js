@@ -6,7 +6,8 @@ import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 import Effects from "./Effects";
 import Controls from "./Controls";
-import { socket } from "../socket/config";
+import { Geometry } from "three";
+// import { socket } from "../socket/config";
 
 const Canvas = styled(c)`
   height: 100vh;
@@ -17,12 +18,12 @@ const Canvas = styled(c)`
   padding: 0;
 `;
 
-function Content({ props, color, thing, count }) {
+function Content({ props, color, thing, count, poo }) {
   const mesh = useRef();
 
   const [active, setActive] = useState(false);
   const colorthings = Math.floor(Math.random() * 0xffffff);
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const dummy = useMemo(() => new THREE.Object3D());
   const funky = useSpring({
     scale: active ? [10, 10, 10] : [10, 10, 10],
     color: color ? "hotpink" : "hotpink",
@@ -30,33 +31,32 @@ function Content({ props, color, thing, count }) {
 
   const particles = useMemo(() => {
     const temp = [];
-    for (let i = 0; i < thing; i++) {
+    new Array(thing).fill().map((_, i) => {
       const t = Math.random() * 100;
       const factor = 20 + Math.random() * 100;
       const speed = 0.01 + Math.random() / 1000;
       const xFactor = -20 + Math.random() * 40;
       const yFactor = -20 + Math.random() * 40;
       const zFactor = -20 + Math.random() * 40;
-      temp.push({ t, factor, speed, xFactor, yFactor, zFactor });
-    }
+      const x = -20 + Math.random() * 40;
+      const y = -20 + Math.random() * 40;
+      const z = -20 + Math.random() * 40;
+      temp.push({ x, y, z });
+      if (thing < poo) {
+        console.log("boom");
+        temp.pop({ x, y, z });
+      }
+    });
+
     return temp;
   }, [thing]);
-
   console.log(particles);
 
   useFrame(() => {
     particles.forEach((particle, i) => {
-      let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
-      t = particle.t += speed / 2;
-      const a = Math.cos(t) + Math.sin(t * 1) / 10;
-      const b = Math.sin(t) + Math.cos(t * 2) / 10;
-      const s = Math.max(1.5, Math.cos(t) * 5);
+      const { x, y, z } = particle;
 
-      dummy.position.set(
-        5 - xFactor * Math.cos(t / 10 + Math.sin(t * 2)),
-        5 - yFactor * Math.cos(t / 10 + Math.sin(t * 2)),
-        5 - zFactor * Math.cos(t / 10 + Math.sin(t * 2) * 2)
-      );
+      dummy.position.set(x, y, z);
       dummy.scale.set(0.5, 0.5, 0.5);
       dummy.updateMatrix();
       mesh.current.setMatrixAt(i, dummy.matrix);
@@ -70,6 +70,7 @@ function Content({ props, color, thing, count }) {
       ref={mesh}
       scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
       args={[null, null, 500]}
+      dispose={null}
     >
       <boxBufferGeometry attach="geometry" args={[5, 5, 10, 32]} />
       <a.meshStandardMaterial
@@ -109,15 +110,21 @@ function Lights() {
   );
 }
 
-export default function Box() {
+export default function Box({ socket }) {
   const [thing, setThing] = useState(0);
+  const [poo, setPoo] = useState(0);
+  const [client, setClient] = useState("");
   const [color, setColor] = useState(false);
   useEffect(() => {
-    socket.on("three", (x) => {
-      setThing((prevState) => prevState + x);
-      console.log(thing + x);
+    socket.on("clientsJoined", (data) => {
+      setThing(data);
+      setPoo(data);
+    });
+    socket.on("clientsLeft", (data) => {
+      setThing(data);
     });
   }, []);
+  console.log("updated number: " + thing);
 
   return (
     <Canvas
@@ -131,7 +138,7 @@ export default function Box() {
     >
       <Suspense fallback={null}>
         <Lights />
-        <Content thing={thing} color={color} count={150} />
+        <Content thing={thing} color={color} count={150} poo={poo} />
         <Controls />
       </Suspense>
       <Effects />
