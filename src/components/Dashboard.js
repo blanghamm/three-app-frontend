@@ -3,14 +3,10 @@ import styled from "styled-components";
 import Drag from "./Drag";
 import Dragvert from "./Dragvert";
 import Para from "./Para";
-import io from "socket.io-client";
 import Scroll from "./Scroll";
 import Title from "./Title";
 import Text from "./Text";
-import Control from "../three-components/control-components/Control";
-
-const endpoint = process.env.REACT_APP_THREE_API_URL;
-const socket = io(endpoint);
+import { socket } from "../socket/config";
 
 const Main = styled.div`
   height: 100vh;

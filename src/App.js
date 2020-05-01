@@ -4,7 +4,7 @@ import Dashboard from "./components/Dashboard";
 import Instructions from "./components/Instructions";
 import List from "./static/List";
 import styled from "styled-components";
-import Control from "./three-components/control-components/Control";
+// import Control from "./three-components/control-components/Control";
 
 import { Switch, Route } from "react-router-dom";
 

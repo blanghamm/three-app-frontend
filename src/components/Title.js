@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { a } from "react-spring";
 import styled from "styled-components";
 import Reward from "react-rewards";
@@ -36,9 +36,11 @@ const Title = ({ socket, TITLES, reward }) => {
       reward.punishMe();
     }
     setCount(count + 1);
-    socket.emit("outgoing", count);
-    console.log("count number = " + count);
   };
+  useEffect(() => {
+    socket.emit("outgoing", count / count);
+    console.log("count number = " + count / count);
+  }, [count]);
   return (
     <Text>
       <Reward

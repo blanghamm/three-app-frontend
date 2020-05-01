@@ -14,8 +14,8 @@ import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 import { useMousePosition } from "../../hooks/useMousePosition";
 
-const endpoint = process.env.REACT_APP_THREE_API_URL;
-const socket = io(endpoint);
+// const endpoint = process.env.REACT_APP_THREE_API_URL;
+// const socket = io(endpoint);
 
 // extend({ OrbitControls });
 
@@ -65,15 +65,15 @@ function Content({ props, count, mouse }) {
         (particle.mx / 10) * a +
           xFactor +
           Math.cos((t / 10) * factor) +
-          (Math.sin(t * 1) * factor) / 10,
+          Math.sin(t * 1) * factor * 0.02,
         (particle.my / 10) * b +
           yFactor +
           Math.sin((t / 10) * factor) +
-          (Math.cos(t * 2) * factor) / 10,
+          Math.cos(t * 2) * factor * 0.02,
         (particle.my / 10) * b +
           zFactor +
           Math.cos((t / 10) * factor) +
-          (Math.sin(t * 3) * factor) / 10
+          Math.sin(t * 3) * factor * 0.02
       );
       dummy.scale.set(s, s, s);
       dummy.updateMatrix();

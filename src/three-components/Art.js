@@ -1,15 +1,12 @@
 import React, { useRef, useState, useEffect, Suspense, useMemo } from "react";
 import * as THREE from "three";
 import { useFrame, useThree, extend } from "react-three-fiber";
-import io from "socket.io-client";
 import { Canvas as c } from "react-three-fiber";
 import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 import Effects from "./Effects";
 import Controls from "./Controls";
-
-const endpoint = process.env.REACT_APP_THREE_API_URL;
-const socket = io(endpoint);
+import { socket } from "../socket/config";
 
 const Canvas = styled(c)`
   height: 100vh;
@@ -40,7 +37,7 @@ function Content({ props, color, thing, count }) {
       const xFactor = -20 + Math.random() * 40;
       const yFactor = -20 + Math.random() * 40;
       const zFactor = -20 + Math.random() * 40;
-      temp.push({ t, factor, speed, xFactor, yFactor, zFactor, mx: 0, my: 0 });
+      temp.push({ t, factor, speed, xFactor, yFactor, zFactor });
     }
     return temp;
   }, [thing]);
@@ -54,18 +51,13 @@ function Content({ props, color, thing, count }) {
       const a = Math.cos(t) + Math.sin(t * 1) / 10;
       const b = Math.sin(t) + Math.cos(t * 2) / 10;
       const s = Math.max(1.5, Math.cos(t) * 5);
+
       dummy.position.set(
-        (particle.mx / 10) * xFactor * a +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * yFactor * b +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 2) * factor) / 10,
-        (particle.my / 10) * zFactor * b +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 3) * factor) / 10
+        5 - xFactor * Math.cos(t / 10 + Math.sin(t * 2)),
+        5 - yFactor * Math.cos(t / 10 + Math.sin(t * 2)),
+        5 - zFactor * Math.cos(t / 10 + Math.sin(t * 2) * 2)
       );
-      dummy.scale.set(s, s, s);
+      dummy.scale.set(0.5, 0.5, 0.5);
       dummy.updateMatrix();
       mesh.current.setMatrixAt(i, dummy.matrix);
     });
@@ -77,8 +69,7 @@ function Content({ props, color, thing, count }) {
       {...props}
       ref={mesh}
       scale={active ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-      args={[null, null, 50]}
-      onClick={(e) => setActive(!active)}
+      args={[null, null, 500]}
     >
       <boxBufferGeometry attach="geometry" args={[5, 5, 10, 32]} />
       <a.meshStandardMaterial
@@ -123,20 +114,15 @@ export default function Box() {
   const [color, setColor] = useState(false);
   useEffect(() => {
     socket.on("three", (x) => {
-      setThing(x);
+      setThing((prevState) => prevState + x);
+      console.log(thing + x);
     });
-    if (thing > 0.04) {
-      setColor(true);
-    }
-    if (thing < 0.04) {
-      setColor(false);
-    }
-  }, [thing]);
+  }, []);
 
   return (
     <Canvas
       shadowMap
-      camera={{ position: [0, 0, 150], fov: 50 }}
+      camera={{ position: [0, 0, 300], fov: 50 }}
       gl={{ antialias: true, alpha: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.Uncharted2ToneMapping;
