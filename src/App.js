@@ -1,10 +1,10 @@
 import React from "react";
 import Box from "./three-components/Art";
 import Dashboard from "./components/Dashboard";
+import Test from "./components/test";
 import Instructions from "./components/Instructions";
 import List from "./static/List";
 import styled from "styled-components";
-import { socket } from "./socket/config";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -24,16 +24,13 @@ function App() {
   return (
     <Mainapp>
       <Switch>
-        <Route path="/three">
-          <Box socket={socket} />
+        <Route exact path="/">
+          <Test />
           {/* <List /> */}
         </Route>
-        <Route path="/">
-          <Dashboard socket={socket} />
+        <Route path="/three">
+          <Box />
         </Route>
-        {/* <Route path="/">
-          <Instructions />
-        </Route> */}
       </Switch>
     </Mainapp>
   );

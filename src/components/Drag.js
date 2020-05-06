@@ -4,7 +4,6 @@ import { useDrag } from "react-use-gesture";
 import styled from "styled-components";
 
 const height = window.innerHeight;
-console.log(height);
 
 const Blob = styled(a.div)`
   z-index: 2;

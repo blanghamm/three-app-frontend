@@ -39,7 +39,6 @@ const Title = ({ socket, TITLES, reward }) => {
   };
   useEffect(() => {
     socket.emit("outgoing", count / count);
-    console.log("count number = " + count / count);
   }, [count]);
   return (
     <Text>

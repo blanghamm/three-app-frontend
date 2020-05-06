@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components";
 import Drag from "./Drag";
 import Dragvert from "./Dragvert";
@@ -6,7 +6,8 @@ import Para from "./Para";
 import Scroll from "./Scroll";
 import Title from "./Title";
 import Text from "./Text";
-// import { socket } from "../socket/config";
+import { SocketContext } from "../index";
+import { Link } from "react-router-dom";
 
 const Main = styled.div`
   height: 100vh;
@@ -21,13 +22,14 @@ const Main = styled.div`
   justify-content: center;
 `;
 
-const Dashboard = ({ socket }) => {
+const Dashboard = () => {
+  const socket = useContext(SocketContext);
   const [visible, setVisible] = useState(false);
   const textBoxSize = Math.floor(Math.random() * 10 + 2).toString() + "em";
   const removeTop = () => {
     setVisible(!visible);
   };
-  console.log("visible state " + visible);
+
   let index = 0;
   const color = [
     {

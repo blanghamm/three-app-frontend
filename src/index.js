@@ -3,10 +3,15 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { socket } from "./socket/config";
+
+export const SocketContext = React.createContext();
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <SocketContext.Provider value={socket}>
+      <App />
+    </SocketContext.Provider>
   </BrowserRouter>,
   document.getElementById("root")
 );

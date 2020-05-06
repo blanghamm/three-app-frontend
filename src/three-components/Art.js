@@ -1,4 +1,11 @@
-import React, { useRef, useState, useEffect, Suspense, useMemo } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  Suspense,
+  useMemo,
+  useContext,
+} from "react";
 import * as THREE from "three";
 import { useFrame } from "react-three-fiber";
 import { Canvas as c } from "react-three-fiber";
@@ -6,7 +13,7 @@ import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
 import Effects from "./Effects";
 import Controls from "./Controls";
-// import { socket } from "../socket/config";
+import { SocketContext } from "../index";
 
 const Canvas = styled(c)`
   height: 100vh;
@@ -83,8 +90,14 @@ function Lights() {
   );
 }
 
-export default function Box({ socket }) {
+export default function Box() {
+  const socket = useContext(SocketContext);
   const [thing, setThing] = useState(0);
+  const [client, setClient] = useState("");
+
+  useEffect(() => {
+    socket.emit("subscribe", "art room");
+  }, [socket]);
   useEffect(() => {
     socket.on("clientsJoined", (data) => {
       setThing(data);
@@ -92,7 +105,8 @@ export default function Box({ socket }) {
     socket.on("clientsLeft", (data) => {
       setThing(data);
     });
-  }, [socket, thing]);
+  }, [thing]);
+  console.log(thing);
 
   return (
     <Canvas

@@ -16,7 +16,9 @@
     "react-spring": "^9.0.0-beta.34",
     "react-three-fiber": "^4.0.19",
     "react-use-gesture": "^7.0.5",
+    "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
+    "socket.io-emitter": "^3.1.1",
     "styled-components": "^5.0.1",
     "styled-react-modal": "^2.0.1",
     "three": "^0.114.0"
