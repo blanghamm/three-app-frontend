@@ -4,7 +4,7 @@ import { SocketContext } from "../index";
 export default function Test() {
   const socket = useContext(SocketContext);
   useEffect(() => {
-    socket.emit("spawn", 1);
+    socket.emit("subscribe", "control room");
   });
   return <div>hello</div>;
 }
