@@ -1,10 +1,28 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { SocketContext } from "../index";
 
 export default function Test() {
   const socket = useContext(SocketContext);
+  const [users, setUsers] = useState([]);
   useEffect(() => {
-    socket.emit("subscribe", "control room");
-  });
-  return <div>hello</div>;
+    socket.emit("subscribe", "art room");
+    socket.on("clientsJoined", (clients) => {
+      setUsers(clients);
+    });
+
+    socket.on("clientsLeave", (clients) => {
+      setUsers(clients);
+    });
+  }, []);
+  console.log("state ", users);
+
+  return (
+    <div>
+      <div>
+        {users.map((id, i) => {
+          return <div key={i}>{users[i].id}</div>;
+        })}
+      </div>
+    </div>
+  );
 }
