@@ -24,10 +24,12 @@ const Canvas = styled(c)`
   padding: 0;
 `;
 
-function Content({ props, thing }) {
+function Content({ props, thing, client }) {
+  const clients = client;
+  const Num = clients.length;
   const particles = useMemo(() => {
     const temp = [];
-    for (let i = 0; i < thing; i++) {
+    for (let i = 0; i < Num; i++) {
       const x = (i % 30) * 3.05;
       const y = Math.floor(i / 30) * 1.05;
       const z = 0;
@@ -35,7 +37,9 @@ function Content({ props, thing }) {
     }
 
     return temp;
-  }, [thing]);
+  }, [client]);
+
+  console.log("in array ", particles);
 
   const mesh = useRef();
   const colorthings = 2 * 0xffffff;
@@ -93,20 +97,26 @@ function Lights() {
 export default function Box() {
   const socket = useContext(SocketContext);
   const [thing, setThing] = useState(0);
-  const [client, setClient] = useState("");
+  const [client, setClient] = useState([]);
 
   useEffect(() => {
-    socket.emit("subscribe", "art room");
-  }, [socket]);
+    socket.on("updateOnLoad", (clients) => {
+      console.log("already in the session ", clients);
+    });
+  }, []);
+
   useEffect(() => {
-    socket.on("clientsJoined", (data) => {
-      setThing(data);
+    socket.on("updateArt", (clients) => {
+      setClient(clients);
     });
-    socket.on("clientsLeft", (data) => {
-      setThing(data);
+  }, []);
+
+  useEffect(() => {
+    socket.on("clientsLeave", (clients) => {
+      setClient(clients);
     });
-  }, [thing]);
-  console.log(thing);
+  }, [socket]);
+  console.log("state ", client);
 
   return (
     <Canvas
@@ -120,7 +130,7 @@ export default function Box() {
     >
       <Suspense fallback={null}>
         <Lights />
-        <Content thing={thing} count={150} />
+        <Content thing={thing} count={150} client={client} />
         <Controls />
       </Suspense>
       <Effects />
