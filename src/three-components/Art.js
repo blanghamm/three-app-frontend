@@ -7,7 +7,7 @@ import React, {
   useContext,
 } from "react";
 import * as THREE from "three";
-import { useFrame, Dom } from "react-three-fiber";
+import { useFrame, Dom, useThree } from "react-three-fiber";
 import { Canvas as c } from "react-three-fiber";
 import styled from "styled-components";
 import { useSpring, a } from "react-spring/three";
@@ -15,6 +15,7 @@ import Effects from "./Effects";
 import Controls from "./Controls";
 import { SocketContext } from "../index";
 import { Curves } from "three/examples/jsm/curves/CurveExtras";
+import { MeshToonMaterial } from "three";
 
 const Canvas = styled(c)`
   height: 100vh;
@@ -75,12 +76,12 @@ function Starter({ client, count, props }) {
   });
 
   return (
-    <group>
-      {client.map((particle, i) => {
+    <group ref={mesh}>
+      {/* {client.map((particle, i) => {
         const { x, y, z } = particle;
         return (
           <mesh ref={mesh} key={client[i].id} position={[x, y, z]}>
-            <boxBufferGeometry attach="geometry" args={[1, 64, 64]} />
+            <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
             <meshStandardMaterial
               attach="material"
               color="pink"
@@ -91,8 +92,9 @@ function Starter({ client, count, props }) {
             />
           </mesh>
         );
-      })}
-      {particles.map((testing, t) => {
+      })} */}
+
+      {/* {particles.map((testing, t) => {
         const { x, y, z } = testing;
         return (
           <mesh ref={mesh} key={t} position={[x, y, z]}>
@@ -100,50 +102,34 @@ function Starter({ client, count, props }) {
             <meshStandardMaterial attach="material" />
           </mesh>
         );
-      })}
-      {/* {randomRings.map(([pos, matrix], p) => {
+      })} */}
+      {particles.map((particle, p) => {
         const f = (Math.sin(p / 10) * Math.PI) / 200;
         return (
-          <mesh
-            ref={mesh}
+          <a.mesh
             key={p}
-            position={pos}
+            position={particle}
             scale={[5 + p * 5 * f, 5 + p * 5 * f, 5 + p * 5 * f]}
-            onUpdate={(self) => self.quaternion.setFromRotationMatrix(matrix)}
           >
             <ringBufferGeometry attach="geometry" args={[1, 1.01, 64]} />
             <meshBasicMaterial attach="material" />
-          </mesh>
+          </a.mesh>
         );
-      })} */}
+      })}
     </group>
   );
 }
 
-function Content({ props, thing, client }) {
-  // const particles = useMemo(() => {
-  //   const temp = [];
-  //   for (let i = 0; i < 150; i++) {
-  //     const x = (i % 30) * 50.05;
-  //     const y = Math.floor(i / 30) * 10.05;
-  //     const z = 0;
-  //     temp.push({ x, y, z });
-  //   }
-
-  //   return temp;
-  // }, []);
-
-  // console.log("in array ", particles);
-
+function Spinning({ props, client }) {
   const mesh = useRef();
-  const colorthings = 2 * 0xffffff;
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   useFrame(() => {
-    client.forEach((particle, i) => {
+    client.map((particle, i) => {
       const { x, y, z } = particle;
       dummy.position.set(x, y, z);
       dummy.scale.set(0.5, 0.5, 0.5);
+      // dummy.rotation.set(Math.random() * Math.PI, Math.sin(Math.random));
       dummy.updateMatrix();
       mesh.current.setMatrixAt(i, dummy.matrix);
     });
@@ -154,21 +140,86 @@ function Content({ props, thing, client }) {
     <group>
       <a.instancedMesh
         {...props}
-        key={client}
         ref={mesh}
+        key={client}
         args={[null, null, 500]}
         dispose={null}
       >
         <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
         <a.meshStandardMaterial
           attach="material"
-          color={colorthings}
           roughness={0.75}
           metalness={0.6}
           clearcoat={1}
           clearcoatRoughness={0.2}
         />
       </a.instancedMesh>
+    </group>
+  );
+}
+
+function Main({ props, client }) {
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const particles = useMemo(() => {
+    let radius = 5.5;
+    let angle = 0;
+    let step = Math.PI / 5;
+
+    const temp = [];
+    for (let i = 0; i < 10; i++) {
+      const x = radius * Math.cos(angle);
+      const y = radius * Math.sin(angle);
+      const z = 0;
+      temp.push({ x, y, z });
+      angle += step;
+    }
+
+    return temp;
+  }, []);
+
+  // console.log("in array ", particles);
+
+  const mesh = useRef();
+  const colorthings = 2 * 0xffffff;
+
+  // useFrame(() => {
+
+  //     const { x, y, z } = particle;
+  //     dummy.position.set(x, y, z);
+  //     dummy.scale.set(0.5, 0.5, 0.5);
+  //     dummy.updateMatrix();
+  //     mesh.current.setMatrixAt(i, dummy.matrix);
+  //   });
+  //   mesh.current.instanceMatrix.needsUpdate = true;
+  // });
+
+  useFrame(() => {
+    mesh.current.rotation.set(
+      Math.sin(Math.random()) * 1.05,
+      Math.sin(Math.random()) * 0.02,
+      Math.cos(Math.random()) * 0.09
+    );
+    mesh.current.needsUpdate = true;
+  });
+
+  return (
+    <group ref={mesh}>
+      {particles.map((particle, i) => {
+        const { x, y, z } = particle;
+        return (
+          <a.mesh key={i} position={[x, y, z]}>
+            <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
+            <meshStandardMaterial
+              attach="material"
+              color="pink"
+              roughness={0.75}
+              metalness={0.6}
+              clearcoat={1}
+              clearcoatRoughness={0.2}
+            />
+          </a.mesh>
+        );
+      })}
     </group>
   );
 }
@@ -191,7 +242,6 @@ function Lights() {
 
 export default function Box() {
   const socket = useContext(SocketContext);
-  const [thing, setThing] = useState(0);
   const [client, setClient] = useState([]);
 
   useEffect(() => {
@@ -217,17 +267,20 @@ export default function Box() {
   return (
     <Canvas
       shadowMap
-      camera={{ position: [0, 0, 70], fov: 50 }}
+      camera={{ position: [0, 0, 50], fov: 50 }}
       gl={{ antialias: true, alpha: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.Uncharted2ToneMapping;
         gl.outputEncoding = THREE.sRGBEncoding;
       }}
     >
+      <group>
+        <Main client={client} />
+        <Spinning client={client} />
+      </group>
       <Suspense fallback={null}>
         <Lights />
-        {/* <Content thing={thing} count={150} client={client} /> */}
-        <Starter client={client} count={30} />
+
         <Controls />
       </Suspense>
       <Effects />
