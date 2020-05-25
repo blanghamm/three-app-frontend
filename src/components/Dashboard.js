@@ -7,13 +7,12 @@ import Scroll from "./Scroll";
 import Title from "./Title";
 import Text from "./Text";
 import { SocketContext } from "../index";
-import { Link } from "react-router-dom";
 
 const Main = styled.div`
   height: 100vh;
   width: 100vw;
   user-select: none;
-  background-color: #303033;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -24,85 +23,111 @@ const Main = styled.div`
 
 const Dashboard = () => {
   const socket = useContext(SocketContext);
+
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    socket.emit("subscribe", "control");
+    socket.on("clientsJoined", (clients) => {
+      setUsers(clients);
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.on("clientsLeave", (clients) => {
+      setUsers(clients);
+      // console.log("from server ", clients);
+    });
+  }, [socket]);
+  console.log("state ", users);
+
   const [visible, setVisible] = useState(false);
   const textBoxSize = Math.floor(Math.random() * 10 + 2).toString() + "em";
-  const removeTop = () => {
-    setVisible(!visible);
-  };
 
   let index = 0;
   const color = [
     {
       key: index++,
-      number: "#cdb380",
+      number: "#fff001",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#e8ddcb",
+      number: "#ff0101",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#033649",
+      number: "#0101fd",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#4B2F3C",
+      number: "#f9f9f9",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#1E3947",
+      number: "#fff001",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#D82338",
+      number: "#ff0101",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#C39133",
+      number: "#0101fd",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#410B23",
+      number: "#f9f9f9",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#C86D6D",
+      number: "#f9f9f9",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#7fc7af",
+      number: "#f9f9f9",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#ff9e9d",
+      number: "#0101fd",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
     {
       key: index++,
-      number: "#ff3d7f",
+      number: "#30303a",
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
+      movement: Math.floor(Math.random() * 50),
     },
   ];
 
@@ -113,7 +138,6 @@ const Dashboard = () => {
         <Main>
           <Title socket={socket} />
           <Text socket={socket} width={textBoxSize} height={textBoxSize} />
-
           {color.map((list) => (
             <Drag
               socket={socket}
@@ -121,6 +145,7 @@ const Dashboard = () => {
               key={list.key}
               width={list.width}
               height={list.height}
+              movement={list.movement}
             ></Drag>
           ))}
           <Para socket={socket} />

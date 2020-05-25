@@ -25,7 +25,7 @@ function App() {
     <Mainapp>
       <Switch>
         <Route exact path="/">
-          <Test />
+          <Dashboard />
           {/* <List /> */}
         </Route>
         <Route path="/three">

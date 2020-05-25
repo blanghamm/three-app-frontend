@@ -7,7 +7,7 @@ const Text = styled(a.div)`
   width: 80px;
   align-content: center;
   user-select: none;
-  color: white;
+  color: black;
   transition-duration: 0.1s;
   :active {
     opacity: 0.5;

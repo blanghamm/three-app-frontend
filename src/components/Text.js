@@ -10,7 +10,7 @@ const Input = styled.input`
     outline: none;
   }
   outline-color: black;
-  outline: 0.075em solid;
+  outline: 0.325em solid;
   cursor: default;
 `;
 

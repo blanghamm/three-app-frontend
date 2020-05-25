@@ -13,7 +13,7 @@ const P1 = styled(a.p)`
   font-size: 20px;
   font-weight: bold;
   width: 200px;
-  color: white;
+  color: black;
   margin: 2em;
 `;
 
