@@ -35,7 +35,6 @@ const Dashboard = () => {
   useEffect(() => {
     socket.on("clientsLeave", (clients) => {
       setUsers(clients);
-      // console.log("from server ", clients);
     });
   }, [socket]);
   console.log("state ", users);

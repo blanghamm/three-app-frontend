@@ -15,7 +15,7 @@ import Effects from "./Effects";
 import Controls from "./Controls";
 import { SocketContext } from "../index";
 import { Curves } from "three/examples/jsm/curves/CurveExtras";
-import { MeshToonMaterial } from "three";
+import { MeshToonMaterial, Points } from "three";
 
 const Canvas = styled(c)`
   height: 100vh;
@@ -158,15 +158,18 @@ function Spinning({ props, client }) {
   );
 }
 
-function Main({ props, client }) {
+function Main({ props, client, position }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  const { x, y, z } = position;
   const particles = useMemo(() => {
+    const { input } = position;
     let radius = 5.5;
     let angle = 0;
     let step = Math.PI / 5;
 
     const temp = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < input; i++) {
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
       const z = 0;
@@ -175,12 +178,16 @@ function Main({ props, client }) {
     }
 
     return temp;
-  }, []);
-
-  // console.log("in array ", particles);
+  });
 
   const mesh = useRef();
+  const orbit = useRef();
   const colorthings = 2 * 0xffffff;
+
+  const rotation = 0.03;
+
+  // const distance = useMemo(() =>{
+  // })
 
   // useFrame(() => {
 
@@ -193,36 +200,103 @@ function Main({ props, client }) {
   //   mesh.current.instanceMatrix.needsUpdate = true;
   // });
 
+  // useFrame(() => {
+  //   mesh.current.rotation.set(
+  //     Math.floor(Math.random()) * 0.05,
+  //     Math.floor(Math.random()) * 0.02,
+  //     Math.floor(Math.random()) * 5.09
+  //   );
+  //   mesh.current.needsUpdate = true;
+  // });
+  // const distance = useMemo(() => {
+  //   const temp = [];
+  //   client.map((value, i) => {
+  //     const stuff = Object.values(client).map((value) => value.x);
+  //     console.log("value ", stuff);
+  //   });
+  // }, []);
+
+  const xValue = Object.values(client).map((value) => value.x);
+  const yValue = Object.values(client).map((value) => value.y);
+  console.log("value ", xValue);
+
+  const points = [];
+  for (let i = 0; i < xValue.length; i++) {
+    points.push(new THREE.Vector3(xValue[i], yValue[i], 0));
+    points.push(new THREE.Vector3(xValue[i], yValue[i], 0));
+  }
+
+  if (client.length - 1) {
+    points.pop(new THREE.Vector3());
+  }
+
+  console.log("how vectors", points);
+
+  const path = new THREE.CatmullRomCurve3(points);
+
+  const geometry = new THREE.TubeBufferGeometry(path, 100, 0.1, 30, true);
+
   useFrame(() => {
-    mesh.current.rotation.set(
-      Math.sin(Math.random()) * 1.05,
-      Math.sin(Math.random()) * 0.02,
-      Math.cos(Math.random()) * 0.09
-    );
-    mesh.current.needsUpdate = true;
+    mesh.current.rotation.x += rotation;
+    orbit.current.rotation.y += 0.05;
   });
 
   return (
-    <group ref={mesh}>
-      {particles.map((particle, i) => {
-        const { x, y, z } = particle;
-        return (
-          <a.mesh key={i} position={[x, y, z]}>
-            <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
-            <meshStandardMaterial
-              attach="material"
-              color="pink"
-              roughness={0.75}
-              metalness={0.6}
-              clearcoat={1}
-              clearcoatRoughness={0.2}
-            />
-          </a.mesh>
-        );
-      })}
+    <group>
+      <mesh geometry={geometry} onUpdate={(self) => self.updateMatrix()}>
+        <meshStandardMaterial color="white" attach="material" />
+      </mesh>
+      <group ref={mesh} position={[x, y, z]}>
+        <a.mesh ref={orbit}>
+          <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
+          <meshStandardMaterial
+            attach="material"
+            color="white"
+            roughness={0.75}
+            metalness={0.6}
+            clearcoat={1}
+            clearcoatRoughness={0.2}
+          />
+          {particles.map((particle, i) => {
+            const { x, y, z } = particle;
+            return (
+              <a.mesh key={i} position={[x, y, z]}>
+                <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
+                <meshStandardMaterial
+                  attach="material"
+                  color="white"
+                  roughness={0.75}
+                  metalness={0.2}
+                  clearcoat={1}
+                  clearcoatRoughness={0.2}
+                />
+              </a.mesh>
+            );
+          })}
+        </a.mesh>
+      </group>
     </group>
   );
 }
+
+// function Line() {
+//   const points = [];
+//   points.push(new THREE.Vector3(0, 0, 0));
+//   points.push(new THREE.Vector3(50, 0, 0));
+//   console.log(points);
+//   const geometry = new THREE.BufferGeometry().setFromPoints(points);
+//   const material = new THREE.LineBasicMaterial({
+//     color: new THREE.Color("blue"),
+//   });
+
+//   return (
+//     <line
+//       geometry={geometry}
+//       material={material}
+//       onUpdate={(self) => self.updateMatrix()}
+//     />
+//   );
+// }
 
 function Lights() {
   return (
@@ -234,8 +308,8 @@ function Lights() {
         height={1000}
         onUpdate={(self) => self.lookAt(new THREE.Vector3(0, 0, 0))}
       />
-      {/* <pointLight intensity={0.3} position={[150, 150, 150]} /> */}
-      <ambientLight intensity={0.1} position={[150, 150, 150]} />
+      <pointLight intensity={0.9} position={[150, 150, 150]} />
+      <ambientLight intensity={0.2} position={[150, 150, 150]} />
     </group>
   );
 }
@@ -249,41 +323,50 @@ export default function Box() {
       console.log("already in the session ", clients);
       setClient(clients);
     });
-  });
+  }, []);
 
   useEffect(() => {
     socket.on("updateArt", (clients) => {
       setClient(clients);
     });
-  });
+  }, []);
 
   useEffect(() => {
     socket.on("clientsLeave", (clients) => {
       setClient(clients);
     });
   }, [socket]);
+
+  useEffect(() => {
+    socket.on("actionId", (clients) => {
+      setClient(clients);
+    });
+  }, []);
   console.log("state ", client);
 
   return (
     <Canvas
       shadowMap
-      camera={{ position: [0, 0, 50], fov: 50 }}
+      camera={{ position: [0, 0, 25], fov: 50 }}
       gl={{ antialias: true, alpha: false }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.Uncharted2ToneMapping;
         gl.outputEncoding = THREE.sRGBEncoding;
+        gl.setClearColor("black");
       }}
     >
       <group>
-        <Main client={client} />
-        <Spinning client={client} />
+        {client.map((users, i) => (
+          <Main key={i} position={users} client={client} />
+        ))}
       </group>
       <Suspense fallback={null}>
         <Lights />
+        {/* <Line /> */}
 
         <Controls />
       </Suspense>
-      <Effects />
+      {/* <Effects /> */}
     </Canvas>
   );
 }

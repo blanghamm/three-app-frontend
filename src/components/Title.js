@@ -26,19 +26,14 @@ const H1 = styled(a.a)`
 `;
 
 const Title = ({ socket, TITLES, reward }) => {
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState(0);
   //Maybe remove the reward me shit as it's cheesy, but need.
-  const Test = () => {
-    if (count < 0.007) {
-      reward.rewardMe();
-    }
-    if (count === 0.007) {
-      reward.punishMe();
-    }
+  const Spawn = () => {
     setCount(count + 1);
   };
   useEffect(() => {
-    socket.emit("outgoing", count / count);
+    socket.emit("spawn", count);
+    console.log(count);
   }, [count]);
   return (
     <Text>
@@ -48,7 +43,7 @@ const Title = ({ socket, TITLES, reward }) => {
         }}
         type="confetti"
       >
-        <H1 onClick={Test}>COLLECTIVE ART</H1>
+        <H1 onClick={Spawn}>COLLECTIVE ART</H1>
       </Reward>
     </Text>
   );

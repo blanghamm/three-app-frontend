@@ -30,8 +30,9 @@ export default function Effects() {
         attachArray="passes"
         scene={scene}
         camera={camera}
-        args={[aspect, 2.2, 1.5, 0.2]}
+        args={[aspect, 0.4, 0, 0.9]}
       />
+      <filmPass attachArray="passes" args={[0.05, 0.5, 15, false]} />
     </effectComposer>
   );
 }
