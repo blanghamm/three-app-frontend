@@ -158,10 +158,10 @@ function Spinning({ props, client }) {
   );
 }
 
-function Main({ props, client, position }) {
+function Main({ props, client, input }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  const refs = useRef([]);
+  const refs = useRef([client]);
 
   useEffect(() => {
     refs.current = refs.current.slice(0, client.length);
@@ -170,13 +170,14 @@ function Main({ props, client, position }) {
   console.log("refs test ", refs);
 
   const particles = useMemo(() => {
-    // const { input } = position;
+    const temp = [];
+    //Need to assign the correct ref to the input
+    // const { input } = user;
     let radius = 5.5;
     let angle = 0;
     let step = Math.PI / 5;
 
-    const temp = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < input; i++) {
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
       const z = 0;
@@ -225,29 +226,26 @@ function Main({ props, client, position }) {
 
   const xValue = Object.values(client).map((value) => value.x);
   const yValue = Object.values(client).map((value) => value.y);
-  console.log("value ", xValue);
+  const zValue = Object.values(client).map((value) => value.z);
 
   const points = [];
   for (let i = 0; i < xValue.length; i++) {
-    points.push(new THREE.Vector3(xValue[i], yValue[i], 0));
-    points.push(new THREE.Vector3(xValue[i], yValue[i], 0));
+    points.push(new THREE.Vector3(xValue[i], yValue[i], zValue[i]));
+    points.push(new THREE.Vector3(xValue[i], yValue[i], zValue[i]));
   }
-
   if (client.length - 1) {
     points.pop(new THREE.Vector3());
   }
 
-  console.log("how vectors", points);
-
+  //Lines between points path and geometry
   const path = new THREE.CatmullRomCurve3(points);
-
-  const geometry = new THREE.TubeBufferGeometry(path, 100, 0.1, 30, true);
-
-  const userMovement = refs.current.map((test, i) => (refs.current[i] = test));
-
-  console.log("user ref id ", userMovement);
+  const geometry = new THREE.TubeBufferGeometry(path, 100, 0.1, 30, false);
 
   useFrame(() => {
+    client.forEach((user, i) => {
+      const { rotation } = user;
+      refs.current[i].rotation.x += rotation;
+    });
     // userMovement.current.rotation.x += 0.03;
     // mesh.current.rotation.x += rotation;
     // orbit.current.rotation.y += 0.02;
@@ -263,12 +261,10 @@ function Main({ props, client, position }) {
         return (
           <a.mesh
             key={i}
-            ref={(test) => (
-              (refs.current[i] = test), console.log("ref inside ", test)
-            )}
+            ref={(test) => (refs.current[i] = test)}
             position={[x, y, z]}
           >
-            <boxBufferGeometry attach="geometry" args={[1, 64, 64]} />
+            <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
             <meshStandardMaterial
               attach="material"
               color="white"
@@ -281,10 +277,14 @@ function Main({ props, client, position }) {
         );
       })}
 
-      {/* {particles.map((particle, i) => {
+      {particles.map((particle, i) => {
         const { x, y, z } = particle;
         return (
-          <a.mesh key={i} position={[x, y, z]}>
+          <a.mesh
+            key={i}
+            ref={(test) => (refs.current[i] = test)}
+            position={[x, y, z]}
+          >
             <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
             <meshStandardMaterial
               attach="material"
@@ -296,7 +296,7 @@ function Main({ props, client, position }) {
             />
           </a.mesh>
         );
-      })} */}
+      })}
       {/* </a.mesh> */}
     </group>
   );
@@ -349,19 +349,28 @@ function Lights() {
 export default function Box() {
   const socket = useContext(SocketContext);
   const [client, setClient] = useState([]);
+  const [input, setInput] = useState(0);
+
+  // useEffect(() => {
+  //   client.forEach((user, i) => {
+  //     const inputUser = user.input;
+  //     setInput(inputUser);
+  //     console.log("input ref ", inputUser);
+  //   });
+  // }, [client]);
 
   useEffect(() => {
     socket.on("updateOnLoad", (clients) => {
       console.log("already in the session ", clients);
       setClient(clients);
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     socket.on("updateArt", (clients) => {
       setClient(clients);
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     socket.on("clientsLeave", (clients) => {
@@ -373,7 +382,20 @@ export default function Box() {
     socket.on("actionId", (clients) => {
       setClient(clients);
     });
-  }, []);
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("userIsRotating", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("updateMovement", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+
   console.log("state ", client);
 
   return (
@@ -392,7 +414,7 @@ export default function Box() {
           <Main key={i} position={users} client={client} />
         ))}
       </group> */}
-      <Main client={client} />
+      <Main client={client} input={input} />
       <Suspense fallback={null}>
         <Lights />
         {/* <Dolly /> */}

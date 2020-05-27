@@ -32,7 +32,7 @@ const Drag = ({ socket, text, number, width, height, movement }) => {
     ({ down, movement: [x, y], cancel }) =>
       set(
         { x: down ? x : 0, y: down ? y : 0, immediate: down },
-        socket.emit("outgoing", (x + y) / 1000)
+        socket.emit("updateUserMovement", (x + y) / 100)
       ),
     {
       initial: () => [x.get(), 0],
