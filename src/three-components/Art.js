@@ -161,15 +161,22 @@ function Spinning({ props, client }) {
 function Main({ props, client, position }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  const { x, y, z } = position;
+  const refs = useRef([]);
+
+  useEffect(() => {
+    refs.current = refs.current.slice(0, client.length);
+  }, [client]);
+
+  console.log("refs test ", refs);
+
   const particles = useMemo(() => {
-    const { input } = position;
+    // const { input } = position;
     let radius = 5.5;
     let angle = 0;
     let step = Math.PI / 5;
 
     const temp = [];
-    for (let i = 0; i < input; i++) {
+    for (let i = 0; i < 10; i++) {
       const x = radius * Math.cos(angle);
       const y = radius * Math.sin(angle);
       const z = 0;
@@ -236,9 +243,14 @@ function Main({ props, client, position }) {
 
   const geometry = new THREE.TubeBufferGeometry(path, 100, 0.1, 30, true);
 
+  const userMovement = refs.current.map((test, i) => (refs.current[i] = test));
+
+  console.log("user ref id ", userMovement);
+
   useFrame(() => {
-    mesh.current.rotation.x += rotation;
-    orbit.current.rotation.y += 0.05;
+    // userMovement.current.rotation.x += 0.03;
+    // mesh.current.rotation.x += rotation;
+    // orbit.current.rotation.y += 0.02;
   });
 
   return (
@@ -246,37 +258,57 @@ function Main({ props, client, position }) {
       <mesh geometry={geometry} onUpdate={(self) => self.updateMatrix()}>
         <meshStandardMaterial color="white" attach="material" />
       </mesh>
-      <group ref={mesh} position={[x, y, z]}>
-        <a.mesh ref={orbit}>
-          <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
-          <meshStandardMaterial
-            attach="material"
-            color="white"
-            roughness={0.75}
-            metalness={0.6}
-            clearcoat={1}
-            clearcoatRoughness={0.2}
-          />
-          {particles.map((particle, i) => {
-            const { x, y, z } = particle;
-            return (
-              <a.mesh key={i} position={[x, y, z]}>
-                <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
-                <meshStandardMaterial
-                  attach="material"
-                  color="white"
-                  roughness={0.75}
-                  metalness={0.2}
-                  clearcoat={1}
-                  clearcoatRoughness={0.2}
-                />
-              </a.mesh>
-            );
-          })}
-        </a.mesh>
-      </group>
+      {client.map((users, i) => {
+        const { x, y, z } = users;
+        return (
+          <a.mesh
+            key={i}
+            ref={(test) => (
+              (refs.current[i] = test), console.log("ref inside ", test)
+            )}
+            position={[x, y, z]}
+          >
+            <boxBufferGeometry attach="geometry" args={[1, 64, 64]} />
+            <meshStandardMaterial
+              attach="material"
+              color="white"
+              roughness={0.75}
+              metalness={0.6}
+              clearcoat={1}
+              clearcoatRoughness={0.2}
+            />
+          </a.mesh>
+        );
+      })}
+
+      {/* {particles.map((particle, i) => {
+        const { x, y, z } = particle;
+        return (
+          <a.mesh key={i} position={[x, y, z]}>
+            <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
+            <meshStandardMaterial
+              attach="material"
+              color="white"
+              roughness={0.75}
+              metalness={0.2}
+              clearcoat={1}
+              clearcoatRoughness={0.2}
+            />
+          </a.mesh>
+        );
+      })} */}
+      {/* </a.mesh> */}
     </group>
   );
+}
+
+function Dolly() {
+  useFrame(({ clock, camera }) => {
+    camera.updateProjectionMatrix(
+      void (camera.position.z = 50 + Math.sin(clock.getElapsedTime()) * 30)
+    );
+  });
+  return null;
 }
 
 // function Line() {
@@ -355,13 +387,15 @@ export default function Box() {
         gl.setClearColor("black");
       }}
     >
-      <group>
+      {/* <group>
         {client.map((users, i) => (
           <Main key={i} position={users} client={client} />
         ))}
-      </group>
+      </group> */}
+      <Main client={client} />
       <Suspense fallback={null}>
         <Lights />
+        {/* <Dolly /> */}
         {/* <Line /> */}
 
         <Controls />
