@@ -18,7 +18,7 @@ const Text = styled.div`
   color: white;
   font-size: 500px;
   margin: 0;
-  line-height: 0.64em;
+  line-height: 0.025em;
   font-weight: bold;
 `;
 
@@ -32,7 +32,7 @@ const Drag = ({ socket, text, number, width, height, movement }) => {
     ({ down, movement: [x, y], cancel }) =>
       set(
         { x: down ? x : 0, y: down ? y : 0, immediate: down },
-        socket.emit("updateUserMovement", (x + y) / 100)
+        socket.emit("updateUserRotation", (x + y) / 1000)
       ),
     {
       initial: () => [x.get(), 0],

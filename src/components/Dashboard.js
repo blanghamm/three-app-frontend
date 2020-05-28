@@ -137,7 +137,7 @@ const Dashboard = () => {
         <Main>
           <Title socket={socket} />
           <Text socket={socket} width={textBoxSize} height={textBoxSize} />
-          {color.map((list) => (
+          {color.map((list, i) => (
             <Drag
               socket={socket}
               number={list.number}

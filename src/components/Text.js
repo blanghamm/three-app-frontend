@@ -24,7 +24,7 @@ const Text = ({ socket, width, height }) => {
   };
 
   const handleSubmit = (event) => {
-    socket.emit("outgoing", number);
+    socket.emit("addNickName", value);
     event.preventDefault();
     setValue("");
   };

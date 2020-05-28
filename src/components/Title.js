@@ -26,13 +26,13 @@ const H1 = styled(a.a)`
 `;
 
 const Title = ({ socket, TITLES, reward }) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState("");
   //Maybe remove the reward me shit as it's cheesy, but need.
   const Spawn = () => {
-    setCount(count + 1);
+    setCount("#f9f9f9");
   };
   useEffect(() => {
-    socket.emit("spawn", count);
+    socket.emit("updateUserColor", count);
     console.log(count);
   }, [count]);
   return (
