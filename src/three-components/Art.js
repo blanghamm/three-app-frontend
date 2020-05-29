@@ -68,15 +68,49 @@ function Main({ props, client, input, color }) {
     return temp;
   });
 
+  let up = true;
+
   useFrame(({ clock }) => {
     client.map((user, i) => {
-      const { rotation, input, aiMovement, id, scale } = user;
-      refs.current[i].rotation.y += rotation;
-      refs.current[i].scale.set(scale + 10, scale + 1, scale + 1);
+      const { rotationX, input, aiMovement, id, scaleX, scaleY, scaleZ } = user;
+
+      // refs.current[i].rotation.y += rotationX;
+      // refs.current[i].rotation.z += input;
+      // refs.current[i].scale.set(scaleX + 0.5, scaleY + 0.5, scaleZ + 0.5);
+
+      // if (up) {
+      //   refs.current[i].position.y += 1.5;
+      //   refs.current[i].scale.y += 0.1 + scaleX;
+      // }
+      // if (refs.current[i].position.y > 50) {
+      //   up = false;
+      // }
+      // if (!up) {
+      //   refs.current[i].position.y += -1.5;
+      //   refs.current[i].scale.y += -0.1 + scaleX;
+      // }
+      // if (refs.current[i].position.y < -20) {
+      //   up = true;
+      // }
       if (id === null) {
         // refs.current[i].rotation.y += aiMovement;
         // refs.current[i].rotation.x += aiMovement;
         // refs.current[i].rotation.z += aiMovement;
+
+        refs.current[i].scale.y += scaleY;
+
+        if (up) {
+          refs.current[i].position.y += 0.5;
+        }
+        if (refs.current[i].position.y > 200) {
+          up = false;
+        }
+        if (!up) {
+          refs.current[i].position.y += -0.5;
+        }
+        if (refs.current[i].position.y < -20) {
+          up = true;
+        }
       }
     });
   });
@@ -95,7 +129,7 @@ function Main({ props, client, input, color }) {
             <boxBufferGeometry attach="geometry" args={[10, 10, 10]} />
             <meshStandardMaterial
               attach="material"
-              color={color}
+              color="pink"
               roughness={1}
               clearcoat={0.5}
               clearcoatRoughness={1}
@@ -117,7 +151,7 @@ function Main({ props, client, input, color }) {
             <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
             <meshStandardMaterial
               attach="material"
-              color="black"
+              color="pink"
               flatShading={true}
             />
           </a.mesh>
@@ -145,16 +179,34 @@ function BottomBox() {
   );
 }
 
+// function Lights() {
+//   const pointLight = useRef();
+//   return (
+//     <group>
+//       <pointLight
+//         ref={pointLight}
+//         intensity={600}
+//         position={[10, 50, 400]}
+//       ></pointLight>
+//       <ambientLight color="white" intensity={0.2} />
+//     </group>
+//   );
+// }
+
 function Lights() {
-  const pointLight = useRef();
   return (
     <group>
-      <pointLight
-        ref={pointLight}
-        intensity={600}
-        position={[10, 50, 400]}
-      ></pointLight>
-      <ambientLight color="white" intensity={0.2} />
+      <pointLight intensity={0.3} />
+      <ambientLight intensity={1} />
+      <spotLight
+        castShadow
+        intensity={0.9}
+        angle={Math.PI / 7}
+        position={[150, 150, 250]}
+        penumbra={1}
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+      />
     </group>
   );
 }
@@ -163,6 +215,9 @@ export default function Box() {
   const socket = useContext(SocketContext);
   const [client, setClient] = useState([]);
   const [color, setColor] = useState("#0101fd");
+  const [input, setInput] = useState(0);
+
+  console.log("incoming input", input);
 
   useEffect(() => {
     socket.on("updateOnLoad", (clients) => {
@@ -186,7 +241,7 @@ export default function Box() {
     socket.on("actionId", (clients) => {
       setClient(clients);
     });
-  }, [socket]);
+  }, [socket, client]);
 
   useEffect(() => {
     socket.on("userIsRotating", (clients) => {
@@ -201,21 +256,33 @@ export default function Box() {
   }, [socket]);
 
   useEffect(() => {
-    socket.on("updateNickName", (clients) => {
+    socket.on("updateColor", (clients) => {
       setClient(clients);
     });
   }, [socket]);
 
   useEffect(() => {
     socket.on("updateNickName", (clients) => {
-      client.map((user, i) => {
+      clients.map((user, i) => {
         setColor(user.color);
       });
     });
   }, [socket]);
 
   useEffect(() => {
-    socket.on("updateScale", (clients) => {
+    socket.on("updateScaleX", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("updateScaleY", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    socket.on("updateScaleZ", (clients) => {
       setClient(clients);
     });
   }, [socket]);

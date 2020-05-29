@@ -50,6 +50,8 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "updateUserScaleX",
+      name: "updateUserScaleX",
     },
     {
       key: index++,
@@ -57,6 +59,8 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "updateUserScaleY",
+      name: "updateUserScaleY",
     },
     {
       key: index++,
@@ -64,6 +68,8 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "updateUserScaleZ",
+      name: "updateUserScaleZ",
     },
     {
       key: index++,
@@ -71,6 +77,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "updateUserMovement",
     },
     {
       key: index++,
@@ -78,6 +85,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "updateUserScale",
     },
     {
       key: index++,
@@ -85,6 +93,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
     {
       key: index++,
@@ -92,6 +101,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
     {
       key: index++,
@@ -99,6 +109,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
     {
       key: index++,
@@ -106,6 +117,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
     {
       key: index++,
@@ -113,6 +125,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
     {
       key: index++,
@@ -120,6 +133,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
     {
       key: index++,
@@ -127,6 +141,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
+      control: "spawn",
     },
   ];
 
@@ -145,6 +160,8 @@ const Dashboard = () => {
               width={list.width}
               height={list.height}
               movement={list.movement}
+              specificFromParent={list.control}
+              text={list.name}
             ></Drag>
           ))}
           <Para socket={socket} />

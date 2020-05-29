@@ -15,14 +15,22 @@ const Blob = styled(a.div)`
 `;
 
 const Text = styled.div`
-  color: white;
-  font-size: 500px;
+  color: black;
+  font-size: 10px;
   margin: 0;
   line-height: 0.025em;
   font-weight: bold;
 `;
 
-const Drag = ({ socket, text, number, width, height, movement }) => {
+const Drag = ({
+  socket,
+  text,
+  number,
+  width,
+  height,
+  movement,
+  specificFromParent,
+}) => {
   const [{ x, y, opacity }, set] = useSpring(() => ({
     config: { duration: 4000 },
     x: 0,
@@ -32,7 +40,7 @@ const Drag = ({ socket, text, number, width, height, movement }) => {
     ({ down, movement: [x, y], cancel }) =>
       set(
         { x: down ? x : 0, y: down ? y : 0, immediate: down },
-        socket.emit("updateUserRotation", (x + y) / 1000)
+        socket.emit(specificFromParent, Math.abs((x + y) / 100000))
       ),
     {
       initial: () => [x.get(), 0],

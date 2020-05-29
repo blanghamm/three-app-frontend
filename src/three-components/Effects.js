@@ -31,7 +31,7 @@ export default function Effects() {
         attachArray="passes"
         scene={scene}
         camera={camera}
-        args={[aspect, 0.4, 1.4, 0.25]}
+        args={[aspect, 0.4, 0.4, 0.25]}
       /> */}
       <filmPass attachArray="passes" args={[0.05, 0, 0, false]} />
       <shaderPass attachArray="passes" args={[FXAAShader]} renderToScreen />
