@@ -61,74 +61,29 @@ function Main({
   scaleX,
   scaleY,
   scaleZ,
-  inputX,
-  inputY,
-  inputZ,
+  rotationX,
+  rotationY,
+  rotationZ,
+  client,
 }) {
-  const refs = useRef();
+  const refs = useRef([client]);
   const mesh = useRef();
   const group = useRef();
   const tempColor = new THREE.Color();
 
-  const [active, setActive] = useState(0);
-
-  const { spring } = useSpring({
-    spring: input,
-    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
+  useFrame(() => {
+    refs.current.position.set(positionX, positionY, positionZ);
+    refs.current.scale.x = scaleX;
+    refs.current.scale.y = scaleY;
+    // refs.current.scale.z = scaleZ;
+    refs.current.rotation.set(rotationX, rotationY, rotationZ);
+    // });
   });
-
-  const { springX } = useSpring({
-    springX: inputX,
-    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
-  });
-
-  const { springY } = useSpring({
-    springY: scaleY,
-    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
-  });
-
-  const { springZ } = useSpring({
-    springZ: scaleZ,
-    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
-  });
-
-  const time = clock.getElapsedTime();
-  const scale = spring.to([0, 1], [1, 5 + time / 100]);
-  const rotation = spring.to([0, 1], [0, Math.PI]);
-  const position = spring.to([0, 1], [0, scaleX + time / 100]);
-
-  const scaleUserX = springX.to([0, 1], [1, 5]);
-  const scaleUserY = springY.to([0, 1], [1, 5]);
-  // const scaleUserZ = springZ.to([0, 1], [1, 5]);
-
-  useEffect(() => {
-    setInterval(() => {
-      setActive((active) => Number(!active));
-    }, 3000);
-  }, []);
-
-  // useFrame(() => {
-  //   if (active < 1) {
-  //     group.current.position.y += 0.2;
-  //   }
-  //   if (active > 0) {
-  //     group.current.position.y += -0.2;
-  //   }
-  // });
 
   return (
     <group ref={group}>
-      <group position={[positionX, positionY, positionZ]}>
-        <a.mesh
-          ref={refs}
-          scale-x={scaleUserX}
-          scale-y={scaleUserY}
-          scale-z={scaleUserY}
-          rotation-x={rotation}
-          rotation-x={scaleUserX}
-          rotation-z={scaleUserY}
-          // scale-z={scaleUserZ}
-        >
+      <group position={[0, 0, 0]}>
+        <a.mesh ref={refs}>
           <boxBufferGeometry attach="geometry" args={[2, 2, 2]} />
           <a.meshStandardMaterial attach="material" color={color} />
         </a.mesh>
@@ -276,10 +231,11 @@ export default function Box() {
               scaleX={user.scaleX}
               scaleY={user.scaleY}
               scaleY={user.scaleZ}
-              inputX={user.rotationX}
-              inputY={user.rotationY}
-              inputZ={user.rotationZ}
+              rotationX={user.rotationX}
+              rotationY={user.rotationY}
+              rotationZ={user.rotationZ}
               input={user.input}
+              client={client}
             />
           ))}
         </group>

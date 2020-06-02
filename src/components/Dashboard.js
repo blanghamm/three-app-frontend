@@ -59,7 +59,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserMovementX",
       name: "updateUserRotationX",
     },
     {
@@ -68,7 +68,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserMovementY",
       name: "updateUserScaleY",
     },
     {
@@ -77,7 +77,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserMovementZ",
       name: "updateUserScaleZ",
     },
     {
@@ -95,7 +95,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserRotationY",
       name: "updateUserScaleX",
     },
     {
@@ -104,7 +104,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserRotationZ",
       name: "updateUserMovementY",
     },
     {
@@ -113,7 +113,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserScaleX",
       name: "updateUserRotationY",
     },
     {
@@ -122,7 +122,7 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserScaleY",
       name: "updateUserRotationZ",
     },
     {
@@ -131,33 +131,33 @@ const Dashboard = () => {
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
+      control: "updateUserScaleZ",
       name: "updateUserMovementX",
     },
-    {
-      key: index++,
-      number: colors[Math.floor(Math.random() * (colors.length - 1))],
-      width: Math.floor(Math.random() * 10).toString() + "em",
-      height: Math.floor(Math.random() * 10).toString() + "em",
-      movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
-    },
-    {
-      key: index++,
-      number: colors[Math.floor(Math.random() * (colors.length - 1))],
-      width: Math.floor(Math.random() * 10).toString() + "em",
-      height: Math.floor(Math.random() * 10).toString() + "em",
-      movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
-    },
-    {
-      key: index++,
-      number: colors[Math.floor(Math.random() * (colors.length - 1))],
-      width: Math.floor(Math.random() * 10).toString() + "em",
-      height: Math.floor(Math.random() * 10).toString() + "em",
-      movement: Math.floor(Math.random() * 50),
-      control: "updateUserRotationX",
-    },
+    // {
+    //   key: index++,
+    //   number: colors[Math.floor(Math.random() * (colors.length - 1))],
+    //   width: Math.floor(Math.random() * 10).toString() + "em",
+    //   height: Math.floor(Math.random() * 10).toString() + "em",
+    //   movement: Math.floor(Math.random() * 50),
+    //   control: "updateUserRotationX",
+    // },
+    // {
+    //   key: index++,
+    //   number: colors[Math.floor(Math.random() * (colors.length - 1))],
+    //   width: Math.floor(Math.random() * 10).toString() + "em",
+    //   height: Math.floor(Math.random() * 10).toString() + "em",
+    //   movement: Math.floor(Math.random() * 50),
+    //   control: "updateUserRotationX",
+    // },
+    // {
+    //   key: index++,
+    //   number: colors[Math.floor(Math.random() * (colors.length - 1))],
+    //   width: Math.floor(Math.random() * 10).toString() + "em",
+    //   height: Math.floor(Math.random() * 10).toString() + "em",
+    //   movement: Math.floor(Math.random() * 50),
+    //   control: "updateUserRotationX",
+    // },
   ];
 
   return (

@@ -58,7 +58,7 @@ const Drag = ({
     ({ down, movement: [x, y], cancel }) =>
       set(
         { x: down ? x : 0, y: down ? y : 0, immediate: down },
-        setCount(Number(!count))
+        socket.emit(specificFromParent, (x + y) / 1000)
       ),
     {
       initial: () => [x.get(), 0],
@@ -68,9 +68,7 @@ const Drag = ({
 
   console.log("count", count);
 
-  useEffect(() => {
-    socket.emit(specificFromParent, count);
-  }, [count]);
+  useEffect(() => {}, [count]);
 
   return (
     <Blob
