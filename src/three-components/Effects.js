@@ -33,8 +33,8 @@ export default function Effects() {
         camera={camera}
         args={[aspect, 0.4, 0.4, 0.25]}
       /> */}
-      <filmPass attachArray="passes" args={[0.05, 0, 0, false]} />
-      <shaderPass attachArray="passes" args={[FXAAShader]} renderToScreen />
+      {/* <filmPass attachArray="passes" args={[0.05, 0, 0, false]} /> */}
+      {/* <shaderPass attachArray="passes" args={[FXAAShader]} renderToScreen /> */}
     </effectComposer>
   );
 }

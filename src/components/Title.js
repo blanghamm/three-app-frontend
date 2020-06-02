@@ -7,7 +7,7 @@ const Text = styled(a.div)`
   width: 80px;
   align-content: center;
   user-select: none;
-  color: black;
+  color: white;
   transition-duration: 0.1s;
   :active {
     opacity: 0.5;
@@ -26,25 +26,18 @@ const H1 = styled(a.a)`
 `;
 
 const Title = ({ socket, TITLES, reward }) => {
-  const [count, setCount] = useState(0.01);
+  const [count, setCount] = useState(0);
   //Maybe remove the reward me shit as it's cheesy, but need.
   const Spawn = () => {
-    setCount(count + 0.03 / Math.random() / 5);
+    setCount(Number(!count));
   };
   useEffect(() => {
-    socket.emit("updateUserScaleX", count);
+    socket.emit("spawn", count);
     console.log(count);
   }, [count]);
   return (
     <Text>
-      <Reward
-        ref={(ref) => {
-          reward = ref;
-        }}
-        type="confetti"
-      >
-        <H1 onClick={Spawn}>COLLECTIVE ART</H1>
-      </Reward>
+      <H1 onClick={Spawn}>COLLECTIVE ART</H1>
     </Text>
   );
 };

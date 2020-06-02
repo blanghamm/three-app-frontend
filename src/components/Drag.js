@@ -1,22 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSpring, a } from "react-spring";
 import { useDrag } from "react-use-gesture";
 import styled from "styled-components";
 
 const height = window.innerHeight;
 
+const colors = [
+  "#A2CCB6",
+  "#FCEEB5",
+  "#EE786E",
+  "#e0feff",
+  "lightpink",
+  "lightblue",
+];
+
 const Blob = styled(a.div)`
   z-index: 2;
-  justify-content: center;
+
   text-align: center;
   overflow: hidden;
   outline-color: black;
-  outline: 0.325em solid;
+  outline: none;
 `;
 
 const Text = styled.div`
   color: black;
-  font-size: 10px;
+  height: fit-content;
+  font-size: 18px;
   margin: 0;
   line-height: 0.025em;
   font-weight: bold;
@@ -31,8 +41,16 @@ const Drag = ({
   movement,
   specificFromParent,
 }) => {
+  const [count, setCount] = useState(0);
+  const [active, setActive] = useState(0);
+  console.log(active);
   const [{ x, y, opacity }, set] = useSpring(() => ({
-    config: { duration: 4000 },
+    config: {
+      mass: 5,
+      tension: 400,
+      friction: 50,
+      precision: 0.0001,
+    },
     x: 0,
     y: 0,
   }));
@@ -40,13 +58,19 @@ const Drag = ({
     ({ down, movement: [x, y], cancel }) =>
       set(
         { x: down ? x : 0, y: down ? y : 0, immediate: down },
-        socket.emit(specificFromParent, Math.abs((x + y) / 100000))
+        setCount(Number(!count))
       ),
     {
       initial: () => [x.get(), 0],
       lockDirection: true,
     }
   );
+
+  console.log("count", count);
+
+  useEffect(() => {
+    socket.emit(specificFromParent, count);
+  }, [count]);
 
   return (
     <Blob
@@ -59,9 +83,7 @@ const Drag = ({
         height: height,
         opacity,
       }}
-    >
-      <Text>{text}</Text>
-    </Blob>
+    ></Blob>
   );
 };
 

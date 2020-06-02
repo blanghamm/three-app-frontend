@@ -9,7 +9,7 @@ const Input = styled.input`
   :focus {
     outline: none;
   }
-  outline-color: black;
+  outline-color: white;
   outline: 0.325em solid;
   cursor: default;
 `;
@@ -24,7 +24,7 @@ const Text = ({ socket, width, height }) => {
   };
 
   const handleSubmit = (event) => {
-    socket.emit("addNickName", value);
+    socket.emit("updateUserRotation", value.length);
     event.preventDefault();
     setValue("");
   };

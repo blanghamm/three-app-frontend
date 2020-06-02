@@ -10,7 +10,7 @@ import * as THREE from "three";
 import { useFrame, Dom, useThree, extend } from "react-three-fiber";
 import { Canvas as c } from "react-three-fiber";
 import styled from "styled-components";
-import { useSpring, a } from "react-spring/three";
+import { useSprings, a, useSpring } from "react-spring/three";
 import Effects from "./Effects";
 import Controls from "./Controls";
 import { SocketContext } from "../index";
@@ -26,143 +26,120 @@ const Canvas = styled(c)`
   padding: 0;
 `;
 
-function Main({ props, client, input, color }) {
-  const refs = useRef([client]);
+const clock = new THREE.Clock();
+
+const number = 35;
+// const colors = [
+//   "#A2CCB6",
+//   "#FCEEB5",
+//   "#EE786E",
+//   "#e0feff",
+//   "lightpink",
+//   "lightblue",
+// ];
+const shapes = [
+  "planeBufferGeometry",
+  "planeBufferGeometry",
+  "planeBufferGeometry",
+];
+
+const data = new Array(number).fill().map(() => {
+  const shape = shapes[Math.round(Math.random() * (shapes.length - 1))];
+  return {
+    shape,
+    // color: colors[Math.round(Math.random() * (colors.length - 1))],
+    args: [0.1 + Math.random() * 9, 0.1 + Math.random() * 9, 10],
+  };
+});
+
+function Main({
+  color,
+  positionX,
+  positionY,
+  positionZ,
+  input,
+  scaleX,
+  scaleY,
+  scaleZ,
+  inputX,
+  inputY,
+  inputZ,
+}) {
+  const refs = useRef();
+  const mesh = useRef();
   const group = useRef();
   const tempColor = new THREE.Color();
-  const colors = new Array(1000)
-    .fill()
-    .map(() => niceColors[10][Math.floor(Math.random() * 5)]);
 
-  const colorArray = useMemo(
-    () =>
-      Float32Array.from(
-        new Array(1000)
-          .fill()
-          .flatMap((_, i) => tempColor.set(colors[i]).toArray())
-      ),
-    []
-  );
+  const [active, setActive] = useState(0);
+
+  const { spring } = useSpring({
+    spring: input,
+    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
+  });
+
+  const { springX } = useSpring({
+    springX: inputX,
+    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
+  });
+
+  const { springY } = useSpring({
+    springY: scaleY,
+    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
+  });
+
+  const { springZ } = useSpring({
+    springZ: scaleZ,
+    config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
+  });
+
+  const time = clock.getElapsedTime();
+  const scale = spring.to([0, 1], [1, 5 + time / 100]);
+  const rotation = spring.to([0, 1], [0, Math.PI]);
+  const position = spring.to([0, 1], [0, scaleX + time / 100]);
+
+  const scaleUserX = springX.to([0, 1], [1, 5]);
+  const scaleUserY = springY.to([0, 1], [1, 5]);
+  // const scaleUserZ = springZ.to([0, 1], [1, 5]);
 
   useEffect(() => {
-    refs.current = refs.current.slice(0, client.length);
-  }, [client]);
+    setInterval(() => {
+      setActive((active) => Number(!active));
+    }, 3000);
+  }, []);
 
-  console.log("refs test ", refs);
-
-  const particles = useMemo(() => {
-    const temp = [];
-    //Need to assign the correct ref to the input
-    let radius = 5.5;
-    let angle = 0;
-    let step = Math.PI / 5;
-
-    for (let i = 0; i < input; i++) {
-      const x = radius * Math.cos(angle);
-      const y = radius * Math.sin(angle);
-      const z = 0;
-      temp.push({ x, y, z });
-      angle += step;
-    }
-
-    return temp;
-  });
-
-  let up = true;
-
-  useFrame(({ clock }) => {
-    client.map((user, i) => {
-      const { rotationX, input, aiMovement, id, scaleX, scaleY, scaleZ } = user;
-
-      // refs.current[i].rotation.y += rotationX;
-      // refs.current[i].rotation.z += input;
-      // refs.current[i].scale.set(scaleX + 0.5, scaleY + 0.5, scaleZ + 0.5);
-
-      // if (up) {
-      //   refs.current[i].position.y += 1.5;
-      //   refs.current[i].scale.y += 0.1 + scaleX;
-      // }
-      // if (refs.current[i].position.y > 50) {
-      //   up = false;
-      // }
-      // if (!up) {
-      //   refs.current[i].position.y += -1.5;
-      //   refs.current[i].scale.y += -0.1 + scaleX;
-      // }
-      // if (refs.current[i].position.y < -20) {
-      //   up = true;
-      // }
-      if (id === null) {
-        // refs.current[i].rotation.y += aiMovement;
-        // refs.current[i].rotation.x += aiMovement;
-        // refs.current[i].rotation.z += aiMovement;
-
-        refs.current[i].scale.y += scaleY;
-
-        if (up) {
-          refs.current[i].position.y += 0.5;
-        }
-        if (refs.current[i].position.y > 200) {
-          up = false;
-        }
-        if (!up) {
-          refs.current[i].position.y += -0.5;
-        }
-        if (refs.current[i].position.y < -20) {
-          up = true;
-        }
-      }
-    });
-  });
+  // useFrame(() => {
+  //   if (active < 1) {
+  //     group.current.position.y += 0.2;
+  //   }
+  //   if (active > 0) {
+  //     group.current.position.y += -0.2;
+  //   }
+  // });
 
   return (
     <group ref={group}>
-      {client.map((users, i) => {
-        const { x, y, z, name, color } = users;
-        return (
-          <a.mesh
-            {...props}
-            key={i}
-            ref={(test) => (refs.current[i] = test)}
-            position={[x, y, z]}
-          >
-            <boxBufferGeometry attach="geometry" args={[10, 10, 10]} />
-            <meshStandardMaterial
-              attach="material"
-              color="pink"
-              roughness={1}
-              clearcoat={0.5}
-              clearcoatRoughness={1}
-              flatShading={true}
-              side={THREE.DoubleSide}
-            />
-          </a.mesh>
-        );
-      })}
-
-      {particles.map((particle, i) => {
-        const { x, y, z } = particle;
-        return (
-          <a.mesh
-            key={i}
-            ref={(test) => (refs.current[i] = test)}
-            position={[x, y, z]}
-          >
-            <sphereBufferGeometry attach="geometry" args={[1, 64, 64]} />
-            <meshStandardMaterial
-              attach="material"
-              color="pink"
-              flatShading={true}
-            />
-          </a.mesh>
-        );
-      })}
+      <group position={[positionX, positionY, positionZ]}>
+        <a.mesh
+          ref={refs}
+          scale-x={scaleUserX}
+          scale-y={scaleUserY}
+          scale-z={scaleUserY}
+          rotation-x={rotation}
+          rotation-x={scaleUserX}
+          rotation-z={scaleUserY}
+          // scale-z={scaleUserZ}
+        >
+          <boxBufferGeometry attach="geometry" args={[2, 2, 2]} />
+          <a.meshStandardMaterial attach="material" color={color} />
+        </a.mesh>
+      </group>
     </group>
   );
 }
 
 function Dolly() {
   useFrame(({ clock, camera }) => {
+    camera.position.set([120, 120, 120]);
     camera.updateProjectionMatrix(
       void (camera.position.z = 50 + Math.sin(clock.getElapsedTime()) * 30)
     );
@@ -170,43 +147,18 @@ function Dolly() {
   return null;
 }
 
-function BottomBox() {
-  return (
-    <mesh position={[0, 0, 0]}>
-      <boxBufferGeometry attach="geometry" args={[4, 4, 4]} />
-      <meshStandardMaterial attach="material" color={"red"} />
-    </mesh>
-  );
-}
-
-// function Lights() {
-//   const pointLight = useRef();
-//   return (
-//     <group>
-//       <pointLight
-//         ref={pointLight}
-//         intensity={600}
-//         position={[10, 50, 400]}
-//       ></pointLight>
-//       <ambientLight color="white" intensity={0.2} />
-//     </group>
-//   );
-// }
-
 function Lights() {
   return (
     <group>
-      <pointLight intensity={0.3} />
-      <ambientLight intensity={1} />
-      <spotLight
-        castShadow
-        intensity={0.9}
-        angle={Math.PI / 7}
-        position={[150, 150, 250]}
-        penumbra={1}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
-      />
+      <pointLight intensity={0.9} />
+      <ambientLight intensity={0.1} />
+      <rectAreaLight
+        intensity={0.5}
+        lookAt={[0, 0, 20]}
+        position={[0, 0, 200]}
+        width={1000}
+        height={500}
+      ></rectAreaLight>
     </group>
   );
 }
@@ -214,43 +166,67 @@ function Lights() {
 export default function Box() {
   const socket = useContext(SocketContext);
   const [client, setClient] = useState([]);
-  const [color, setColor] = useState("#0101fd");
-  const [input, setInput] = useState(0);
-
-  console.log("incoming input", input);
-
+  //Initial loading, updating and leaving sockets
   useEffect(() => {
     socket.on("updateOnLoad", (clients) => {
       setClient(clients);
     });
   }, [socket]);
-
   useEffect(() => {
     socket.on("updateArt", (clients) => {
       setClient(clients);
     });
   }, [socket]);
-
   useEffect(() => {
     socket.on("clientsLeave", (clients) => {
       setClient(clients);
     });
   }, [socket]);
-
+  //Incoming rotation sockets
   useEffect(() => {
-    socket.on("actionId", (clients) => {
-      setClient(clients);
-    });
-  }, [socket, client]);
-
-  useEffect(() => {
-    socket.on("userIsRotating", (clients) => {
+    socket.on("userRotationX", (clients) => {
       setClient(clients);
     });
   }, [socket]);
-
   useEffect(() => {
-    socket.on("updateMovement", (clients) => {
+    socket.on("userRotationY", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  useEffect(() => {
+    socket.on("userRotationZ", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  //Incoming movement sockets
+  useEffect(() => {
+    socket.on("updateMovementX", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  useEffect(() => {
+    socket.on("updateMovementY", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  useEffect(() => {
+    socket.on("updateMovementZ", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  //Incoming scale sockets
+  useEffect(() => {
+    socket.on("updateScaleX", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  useEffect(() => {
+    socket.on("updateScaleY", (clients) => {
+      setClient(clients);
+    });
+  }, [socket]);
+  useEffect(() => {
+    socket.on("updateScaleZ", (clients) => {
       setClient(clients);
     });
   }, [socket]);
@@ -262,52 +238,52 @@ export default function Box() {
   }, [socket]);
 
   useEffect(() => {
-    socket.on("updateNickName", (clients) => {
-      clients.map((user, i) => {
-        setColor(user.color);
-      });
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    socket.on("updateScaleX", (clients) => {
+    socket.on("actionId", (clients) => {
       setClient(clients);
     });
   }, [socket]);
 
-  useEffect(() => {
-    socket.on("updateScaleY", (clients) => {
-      setClient(clients);
-    });
-  }, [socket]);
-
-  useEffect(() => {
-    socket.on("updateScaleZ", (clients) => {
-      setClient(clients);
-    });
-  }, [socket]);
-
-  console.log("state ", client);
+  console.log("state", client);
 
   return (
     <Canvas
       concurrent
-      camera={{ fov: 50, position: [10, 5, 10], near: 30, far: 1500 }}
+      camera={{ fov: 35, position: [120, 120, 120] }}
       gl={{ antialias: true, alpha: false }}
       onCreated={({ gl, scene }) => {
-        // scene.rotation.set(Math.PI / 8, Math.PI / 4, 0);
-        scene.position.set(-162, -168, -150);
+        // scene.rotation.set(0, 0, 0);
+        scene.position.set(-40, -40, -40);
         gl.setClearColor("#f5f5f5");
+        if (client.length > 5) {
+          gl.setClearColor("black");
+        }
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.outputEncoding = THREE.sRGBEncoding;
         gl.physicallyCorrectLights = true;
       }}
     >
       <Lights />
-      {/* <Dolly /> */}
       <Controls />
-      <Main client={client} color={color} />
-      {/* <BottomBox /> */}
+      <group>
+        <group>
+          {client.map((user, i) => (
+            <Main
+              key={i}
+              color={user.color}
+              positionX={user.x}
+              positionY={user.y}
+              positionZ={user.z}
+              scaleX={user.scaleX}
+              scaleY={user.scaleY}
+              scaleY={user.scaleZ}
+              inputX={user.rotationX}
+              inputY={user.rotationY}
+              inputZ={user.rotationZ}
+              input={user.input}
+            />
+          ))}
+        </group>
+      </group>
       <Effects />
     </Canvas>
   );

@@ -6,168 +6,181 @@ import Para from "./Para";
 import Scroll from "./Scroll";
 import Title from "./Title";
 import Text from "./Text";
+import Header from "./Header";
 import { SocketContext } from "../index";
 
 const Main = styled.div`
   height: 100vh;
   width: 100vw;
   user-select: none;
-  background-color: #f5f5f5;
+  background-color: #3d4447;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-content: center;
-  align-items: center;
   justify-content: center;
+  flex-basis: 80%;
+`;
+
+const Content = styled.div`
+  height: fit-content;
+  width: 100vw;
+  user-select: none;
+  background-color: #3d4447;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-basis: 80%;
 `;
 
 const Dashboard = () => {
   const socket = useContext(SocketContext);
-
-  const [users, setUsers] = useState([]);
   useEffect(() => {
     socket.emit("subscribe", "control");
-    socket.on("clientsJoined", (clients) => {
-      setUsers(clients);
-    });
-  }, []);
-
-  useEffect(() => {
-    socket.on("clientsLeave", (clients) => {
-      setUsers(clients);
-    });
   }, [socket]);
-  console.log("state ", users);
 
   const [visible, setVisible] = useState(false);
   const textBoxSize = Math.floor(Math.random() * 10 + 2).toString() + "em";
+
+  const colors = [
+    "#A2CCB6",
+    "#FCEEB5",
+    "#EE786E",
+    "#e0feff",
+    "lightpink",
+    "lightblue",
+  ];
 
   let index = 0;
   const color = [
     {
       key: index++,
-      number: "#fff001",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserScaleX",
-      name: "updateUserScaleX",
+      control: "updateUserRotationX",
+      name: "updateUserRotationX",
     },
     {
       key: index++,
-      number: "#ff0101",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserScaleY",
+      control: "updateUserRotationX",
       name: "updateUserScaleY",
     },
     {
       key: index++,
-      number: "#0101fd",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserScaleZ",
+      control: "updateUserRotationX",
       name: "updateUserScaleZ",
     },
     {
       key: index++,
-      number: "#f9f9f9",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserMovement",
+      control: "updateUserRotationX",
+      name: "updateUserMovementX",
     },
     {
       key: index++,
-      number: "#fff001",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "updateUserScale",
+      control: "updateUserRotationX",
+      name: "updateUserScaleX",
     },
     {
       key: index++,
-      number: "#ff0101",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
+      name: "updateUserMovementY",
     },
     {
       key: index++,
-      number: "#0101fd",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
+      name: "updateUserRotationY",
     },
     {
       key: index++,
-      number: "#f9f9f9",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
+      name: "updateUserRotationZ",
     },
     {
       key: index++,
-      number: "#f9f9f9",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
+      name: "updateUserMovementX",
     },
     {
       key: index++,
-      number: "#f9f9f9",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
     },
     {
       key: index++,
-      number: "#0101fd",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
     },
     {
       key: index++,
-      number: "#30303a",
+      number: colors[Math.floor(Math.random() * (colors.length - 1))],
       width: Math.floor(Math.random() * 10).toString() + "em",
       height: Math.floor(Math.random() * 10).toString() + "em",
       movement: Math.floor(Math.random() * 50),
-      control: "spawn",
+      control: "updateUserRotationX",
     },
   ];
 
   return (
     <Main>
-      {/* <input type="checkbox" checked={visible} onChange={removeTop}></input> */}
-      {!visible && (
-        <Main>
-          <Title socket={socket} />
-          <Text socket={socket} width={textBoxSize} height={textBoxSize} />
-          {color.map((list, i) => (
-            <Drag
-              socket={socket}
-              number={list.number}
-              key={list.key}
-              width={list.width}
-              height={list.height}
-              movement={list.movement}
-              specificFromParent={list.control}
-              text={list.name}
-            ></Drag>
-          ))}
-          <Para socket={socket} />
-          {/* <Dragvert socket={socket} style={{ zIndex: 0 }} /> */}
-        </Main>
-      )}
+      <Header socket={socket} />
+      <Content>
+        {color.map((list, i) => (
+          <Drag
+            style={{ zIndex: 5 }}
+            socket={socket}
+            number={list.number}
+            key={list.key}
+            width={list.width}
+            height={list.height}
+            movement={list.movement}
+            specificFromParent={list.control}
+            text={list.name}
+          ></Drag>
+        ))}
+      </Content>
+      <Content>
+        <Para socket={socket}></Para>
+      </Content>
     </Main>
   );
 };
