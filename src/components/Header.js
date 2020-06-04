@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import link, { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowsAltV, faArrowsAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Main = styled.div`
   width: 100vw;
@@ -8,7 +9,6 @@ const Main = styled.div`
   color: white;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
   margin: 50;
 `;
 
@@ -16,14 +16,32 @@ const H1 = styled.h1`
   padding-left: 1em;
   cursor: pointer;
   transition-duration: 0.1s;
+  justify-content: flex-start;
   :active {
     color: #ee786e;
   }
 `;
 
-const H2 = styled.h1`
-  padding-left: 0.5em;
+const Box = styled.div`
   transition-duration: 0.1s;
+  font-size: 0.825em;
+  width: 2em;
+  height: 2em;
+  background-color: lightpink;
+  align-self: flex-start;
+  margin: 1.625em;
+  :active {
+    color: #ee786e;
+  }
+`;
+
+const BoxOther = styled.div`
+  transition-duration: 0.1s;
+  width: 2em;
+  height: 2em;
+  background-color: lightpink;
+  margin: 1.625em;
+  align-self: flex-end;
   :active {
     color: #ee786e;
   }
@@ -31,34 +49,34 @@ const H2 = styled.h1`
 
 const Header = ({ socket }) => {
   const [count, setCount] = useState(0);
+  const [active, setActive] = useState(false);
   const [number, setNumber] = useState(0);
-  //Maybe remove the reward me shit as it's cheesy, but need.
   const Spawn = () => {
     setCount(Number(!count));
     setNumber(number + 1);
   };
   useEffect(() => {
     socket.emit("spawn", count);
-    console.log(count);
   }, [count]);
   return (
     <Main>
-      <H1 onClick={Spawn}>Collective</H1>
-      <Link
-        style={{
-          textDecorationLine: "none",
-          textDecoration: "none",
-          color: "white",
-        }}
-        to="/three"
-        target="_blank"
-      >
-        <H2>Art</H2>
-      </Link>
-      {number === 0 ? (
-        <div></div>
+      {active ? (
+        <div style={{ width: "100vw" }}>
+          <H1 onClick={(e) => setActive(false)}>
+            Collective Art:{" "}
+            <div style={{ color: "lightpink" }}>
+              try dragging the coloured blocks
+            </div>
+          </H1>
+        </div>
       ) : (
-        <H1 onClick={(e) => setNumber(0)}>+{number}</H1>
+        <Box onClick={(e) => setActive(true)}>
+          <FontAwesomeIcon
+            style={{ margin: "auto", padding: "0.5em" }}
+            icon={faArrowsAlt}
+          />
+          click me!
+        </Box>
       )}
     </Main>
   );

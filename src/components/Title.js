@@ -33,7 +33,6 @@ const Title = ({ socket, TITLES, reward }) => {
   };
   useEffect(() => {
     socket.emit("spawn", count);
-    console.log(count);
   }, [count]);
   return (
     <Text>

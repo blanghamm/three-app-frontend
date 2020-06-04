@@ -7,6 +7,7 @@ import Scroll from "./Scroll";
 import Title from "./Title";
 import Text from "./Text";
 import Header from "./Header";
+import Box from "../three-components/Art";
 import { SocketContext } from "../index";
 
 const Main = styled.div`
@@ -23,6 +24,18 @@ const Main = styled.div`
 
 const Content = styled.div`
   height: fit-content;
+  width: 100vw;
+  user-select: none;
+  background-color: #3d4447;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-basis: 80%;
+`;
+
+const ContentArt = styled.div`
+  height: 20em;
   width: 100vw;
   user-select: none;
   background-color: #3d4447;
@@ -178,9 +191,10 @@ const Dashboard = () => {
           ></Drag>
         ))}
       </Content>
-      <Content>
-        <Para socket={socket}></Para>
-      </Content>
+      <ContentArt>
+        {/* <Para socket={socket}></Para> */}
+        <Box />
+      </ContentArt>
     </Main>
   );
 };

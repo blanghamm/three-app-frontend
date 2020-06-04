@@ -15,6 +15,7 @@ import Effects from "./Effects";
 import Controls from "./Controls";
 import { SocketContext } from "../index";
 import niceColors from "nice-color-palettes";
+import { HTML } from "drei";
 
 const Canvas = styled(c)`
   box-sizing: border-box;
@@ -66,17 +67,20 @@ function Main({
   rotationZ,
   client,
 }) {
-  const refs = useRef([client]);
+  const refs = useRef();
   const mesh = useRef();
   const group = useRef();
   const tempColor = new THREE.Color();
 
   useFrame(() => {
     refs.current.position.set(positionX, positionY, positionZ);
-    refs.current.scale.x = scaleX;
-    refs.current.scale.y = scaleY;
-    // refs.current.scale.z = scaleZ;
-    refs.current.rotation.set(rotationX, rotationY, rotationZ);
+    refs.current.scale.x = scaleX + 10;
+    refs.current.scale.y = scaleY + 10;
+    refs.current.scale.z = scaleZ + 10;
+    // refs.current.rotation.set(rotationX, rotationY, rotationZ);
+    refs.current.rotation.x = rotationX + 10;
+    refs.current.rotation.y = rotationX + 10;
+    refs.current.rotation.z = rotationZ;
     // });
   });
 
@@ -198,8 +202,6 @@ export default function Box() {
     });
   }, [socket]);
 
-  console.log("state", client);
-
   return (
     <Canvas
       concurrent
@@ -208,18 +210,18 @@ export default function Box() {
       onCreated={({ gl, scene }) => {
         // scene.rotation.set(0, 0, 0);
         scene.position.set(-40, -40, -40);
-        gl.setClearColor("#f5f5f5");
-        if (client.length > 5) {
-          gl.setClearColor("black");
-        }
+        gl.setClearColor("white");
         gl.toneMapping = THREE.ACESFilmicToneMapping;
         gl.outputEncoding = THREE.sRGBEncoding;
         gl.physicallyCorrectLights = true;
       }}
     >
       <Lights />
-      <Controls />
+      {/* <Controls /> */}
       <group>
+        {/* <HTML>
+          <h1>{client.length}</h1>
+        </HTML> */}
         <group>
           {client.map((user, i) => (
             <Main
@@ -230,7 +232,7 @@ export default function Box() {
               positionZ={user.z}
               scaleX={user.scaleX}
               scaleY={user.scaleY}
-              scaleY={user.scaleZ}
+              scaleZ={user.scaleZ}
               rotationX={user.rotationX}
               rotationY={user.rotationY}
               rotationZ={user.rotationZ}

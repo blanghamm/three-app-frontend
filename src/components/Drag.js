@@ -43,7 +43,6 @@ const Drag = ({
 }) => {
   const [count, setCount] = useState(0);
   const [active, setActive] = useState(0);
-  console.log(active);
   const [{ x, y, opacity }, set] = useSpring(() => ({
     config: {
       mass: 5,
@@ -58,15 +57,13 @@ const Drag = ({
     ({ down, movement: [x, y], cancel }) =>
       set(
         { x: down ? x : 0, y: down ? y : 0, immediate: down },
-        socket.emit(specificFromParent, (x + y) / 1000)
+        socket.emit(specificFromParent, (x + y) / 100)
       ),
     {
       initial: () => [x.get(), 0],
       lockDirection: true,
     }
   );
-
-  console.log("count", count);
 
   useEffect(() => {}, [count]);
 
