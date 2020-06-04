@@ -2,5 +2,5 @@ Collective Art is a Plymouth University Final Year Project, created to explore i
 
 The frontend application is designed using React, a Javascript UI library developed by Facebook, it is used in combination with React-Three-Fiber. RTF is a library that allows React to use Three js a WebGL library for the creation of 3D environments.
 
-
+The frontend application is deployed on Netlify and is accessible from the url at the top.
 
